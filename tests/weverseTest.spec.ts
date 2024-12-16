@@ -3,26 +3,16 @@ import { test, expect } from '@playwright/test';
 const userEmail = ''; 
 const userPassword = '';
 
-test('has title', async ({ page }) => {
-  await page.goto('https://weverse.io/');
-
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Weverse/);
-});
-
 test('weverse test', async ({ page }) => {
+
   await page.goto('https://weverse.io/');
   console.log("위버스 페이지 진입");
 
   const modalCloseButton = page.locator('button[class^="BaseModalView_bottom_button__"]').nth(0);
-
   const signInButton = page.locator('button[class^="HeaderView_link_sign__"]');
-  const signInButton2 = page.locator('button', { hasText: 'Sign in' });
-  const signInButton3 = page.getByRole('button', { name: 'Sign in'}); 
-  
+
   await modalCloseButton.click();
   await signInButton.click();
-
   await expect(page).toHaveURL(/account.weverse/);
   console.log("로그인 페이지 진입");
 
@@ -34,7 +24,23 @@ test('weverse test', async ({ page }) => {
 
   await userPasswordInput.fill(userPassword);
   await page.locator('button[type="submit"]').click();
-  console.log("로그인 완료");
-
+  
   await expect(page).not.toHaveURL(/account.weverse/);
+  console.log("로그인 후 위버스 페이지 복귀 완료");
+
+  const profileButton = page.locator('button[class^="HeaderView_profile_button__"]');
+
+  const apiUrlPattern = /https:\/\/global\.apis\.naver\.com\/weverse\/wevweb\/users\/v1\.0\/users\/me\?/;
+  const responsePromise = page.waitForResponse((response) => 
+    apiUrlPattern.test(response.url()) && response.status() === 200
+  );
+
+  await profileButton.click();
+  await expect(page).toHaveURL(/weverse.io\/more/);
+  console.log("프로필 페이지 진입");
+
+  const response = await responsePromise;
+  const jsonResponse = await response.json();
+  
+  console.log("나의 WID = " + jsonResponse.wid);
 });
