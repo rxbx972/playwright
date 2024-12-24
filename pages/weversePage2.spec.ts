@@ -58,7 +58,6 @@ class weversePage2 {
     console.log("로그인 후 위버스 메인 복귀 완료");
   }
 
-
   async getResponse_wid() {
     const apiUrlPattern = /https:\/\/global\.apis\.naver\.com\/weverse\/wevweb\/users\/v1\.0\/users\/me\?/;
     const responsePromise = this.page.waitForResponse((response) =>
@@ -79,6 +78,19 @@ class weversePage2 {
     await signOutButton.click();
     await expect(this.page).not.toHaveURL(/weverse.io\/more/);
     console.log("로그아웃 후 위버스 메인 복귀 완료");
+  }
+
+  async enterNewArtist() {
+    const newArtist_first = this.page.locator('[class^="HomeArtistListSlotView_artist_link__"]').nth(0);
+    const gotoCommunityButton = this.page.locator('[class^="MobileArtistPediaGoToCommunityButtonView_link__"]');
+
+    await newArtist_first.click();
+    await expect(this.page).toHaveURL(/artistpedia/);
+    console.log("새로운 아티스트의 아티스트피디아 페이지 진입");
+
+    await gotoCommunityButton.click();
+    await expect(this.page).toHaveURL(/feed/);
+    console.log("새로운 아티스트의 커뮤니티 페이지 진입");
   }
 }
 
