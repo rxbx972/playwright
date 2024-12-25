@@ -3,12 +3,12 @@ import { test, expect } from '@playwright/test';
 const userEmail = '';
 const userPassword = '';
 
-test.beforeAll(async ({page}) => {
+test.beforeEach(async ({page}) => {
   await page.goto('https://weverse.io/');
   console.log("위버스 페이지 진입");
 });
 
-test.afterAll(async ({page}) => {
+test.afterEach(async ({page}) => {
   await page.close();
   console.log("위버스 테스트 종료");
 })

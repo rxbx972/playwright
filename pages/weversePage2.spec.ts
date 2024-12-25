@@ -20,6 +20,38 @@ class weversePage2 {
     console.log("모달 존재 확인 후 닫기");
   }
 
+  async clickHeaderButton_jellyShop() {
+    const jellyShopButton = this.page.locator('button[class^="HeaderView_jelly_shop_link__"]');
+
+    const [jellyShopPage] = await Promise.all([
+      this.page.waitForEvent('popup'),
+      jellyShopButton.click()
+    ]);
+
+    await jellyShopPage.waitForLoadState();
+    await expect(jellyShopPage).toHaveURL(/jelly.weverse/);
+    console.log('젤리샵 페이지 진입');
+
+    await jellyShopPage.close();
+    console.log('젤리샵 페이지 닫기');
+  }
+
+  async clickHeaderButton_weverseShop() {
+    const weverseShopButton = this.page.locator('[class^="HeaderView_shop_link__"]');
+
+    const [weverseShopPage] = await Promise.all([
+      this.page.waitForEvent('popup'),
+      weverseShopButton.click()
+    ]);
+
+    await weverseShopPage.waitForLoadState();
+    await expect(weverseShopPage).toHaveURL(/shop.weverse/);
+    console.log('위버스샵 페이지 진입');
+
+    await weverseShopPage.close();
+    console.log('위버스샵 페이지 닫기');
+  }
+
   async clickHeaderButton_signIn() {
     const signInButton = this.page.locator('button[class^="HeaderView_link_sign__"]');
 
