@@ -114,15 +114,16 @@ class weversePage2 {
 
   async enterNewArtist() {
     const newArtist_first = this.page.locator('[class^="HomeArtistListSlotView_artist_link__"]').nth(0);
-    const gotoCommunityButton = this.page.locator('[class^="MobileArtistPediaGoToCommunityButtonView_link__"]');
+    const gotoCommunityButton = this.page.locator('[class*="ArtistPediaGoToCommunityButtonView_link__"]');
 
+    await this.page.mouse.wheel(0, 2000);
     await newArtist_first.click();
     await expect(this.page).toHaveURL(/artistpedia/);
-    console.log("새로운 아티스트의 아티스트피디아 페이지 진입");
+    console.log(`새로운 아티스트의 아티스트피디아 페이지 진입 확인`);
 
     await gotoCommunityButton.click();
     await expect(this.page).toHaveURL(/feed/);
-    console.log("새로운 아티스트의 커뮤니티 페이지 진입");
+    console.log(`새로운 아티스트의 커뮤니티 페이지 진입 확인`);
   }
 }
 

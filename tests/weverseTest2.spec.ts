@@ -17,7 +17,7 @@ test.afterEach(async ({ page }) => {
 
 test.describe('Weverse Test', () => {
 
-  test.skip('login and logout', async ({ }) => {
+  test('login and logout', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
@@ -34,7 +34,7 @@ test.describe('Weverse Test', () => {
     await weverse.clickHeaderButton_weverseShop();
   });
 
-  test.skip('enter new artist', async ({ }) => {
+  test('enter new artist', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.enterNewArtist();
