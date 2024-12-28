@@ -81,7 +81,7 @@ class weversePage2 {
     const passwordInput = this.page.locator('input[name="password"]');
 
     await emailInput.fill(email);
-    await this.page.locator('button[type="submit"]').nth(1).click();
+    await this.page.locator('button[type="submit"]').click();
 
     await passwordInput.fill(password);
     await this.page.locator('button[type="submit"]').click();

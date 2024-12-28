@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
+import config from '../config.json' assert { type: 'json' };
 
-const userEmail = '';
-const userPassword = '';
+const userEmail = config.email;
+const userPassword = config.password;
 
 test.beforeEach(async ({page}) => {
   await page.goto('https://weverse.io/');
@@ -15,7 +16,7 @@ test.afterEach(async ({page}) => {
 
 test.describe('Weverse Test', () => {
 
-  test('로그인 완료', async ({ page }) => {
+  test('로그인 후 WID 조회', async ({ page }) => {
     const modalCloseButton = page.locator('button[class^="BaseModalView_bottom_button__"]').nth(0);
     const signInButton = page.locator('button[class^="HeaderView_link_sign__"]');
 
@@ -28,16 +29,14 @@ test.describe('Weverse Test', () => {
     const userPasswordInput = page.locator('input[name="password"]');
 
     await userEmailInput.fill(userEmail);
-    await page.locator('button[type="submit"]').nth(1).click();
+    await page.locator('button[type="submit"]').click();
 
     await userPasswordInput.fill(userPassword);
     await page.locator('button[type="submit"]').click();
 
     await expect(page).not.toHaveURL(/account.weverse/);
     console.log("로그인 후 위버스 페이지 복귀 완료");
-  });
 
-  test('WID 조회 완료', async ({ page }) => {
     const profileButton = page.locator('button[class^="HeaderView_profile_button__"]');
 
     const apiUrlPattern = /https:\/\/global\.apis\.naver\.com\/weverse\/wevweb\/users\/v1\.0\/users\/me\?/;
