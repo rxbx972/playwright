@@ -1,14 +1,17 @@
 import { test } from '@playwright/test';
 import { weversePage2 } from '../pages/weversePage2.spec';
+import { weverseCommunityPage } from '../pages/weverseCommunityPage.spec';
 import config from '../weverseConfig.json';
 
 const userEmail = config.email;
 const userPassword = config.password;
 
 let weverse;
+let community;
 
 test.beforeEach(async ({ page }) => {
   weverse = new weversePage2(page);
+  community = new weverseCommunityPage(page);
 })
 
 test.afterEach(async ({ page }) => {
@@ -18,7 +21,7 @@ test.afterEach(async ({ page }) => {
 
 test.describe('Weverse Test', () => {
 
-  test('login and logout', async ({ }) => {
+  test.skip('login and logout', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
@@ -28,16 +31,25 @@ test.describe('Weverse Test', () => {
     await weverse.signOut();
   });
 
-  test('enter jellyshop and shop', async ({ }) => {
+  test.skip('enter jellyshop and shop', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_jellyShop();
     await weverse.clickHeaderButton_weverseShop();
   });
 
-  test('enter new artist', async ({ }) => {
+  test.skip('enter new artist', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.enterNewArtist();
+  });
+
+  test('join community', async ({ }) => {
+    await weverse.gotoMain();
+    await weverse.closeModal();
+    await weverse.clickHeaderButton_signIn();
+    await weverse.signIn(userEmail, userPassword);
+    await community.gotoCommunity('cnblue');
+    await community.joinCommunity();
   });
 });

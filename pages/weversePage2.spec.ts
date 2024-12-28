@@ -93,7 +93,7 @@ class weversePage2 {
         config.serviceUrl,
         { polling: 4000, timeout: 20000 }
       );
-      console.log(`로그인 후 위버스 페이지 복귀 완료 : ${this.page.url}`);
+      console.log(`로그인 후 위버스 페이지 복귀 완료 : ${this.page.url()}`);
     } catch (error) {
       console.error(`로그인 후 위버스 페이지 이동 오류 :`, error);
     }
@@ -115,7 +115,7 @@ class weversePage2 {
 
     await signOutButton.click();
     await expect(this.page).not.toHaveURL(/weverse.io\/more/);
-    console.log(`로그아웃 후 위버스 페이지 복귀 완료 : ${this.page.url}`);
+    console.log(`로그아웃 후 위버스 페이지 복귀 완료 : ${this.page.url()}`);
   }
 
   async enterNewArtist() {
