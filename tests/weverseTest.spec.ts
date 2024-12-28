@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import config from '../config.json';
+import config from '../weverseConfig.json';
 
 const mainUrl = config.serviceUrl;
 const userEmail = config.email;
@@ -47,7 +47,7 @@ test.describe('Weverse Test', () => {
     }
 
     const apiUrlPattern = /https:\/\/global\.apis\.naver\.com\/weverse\/wevweb\/users\/v1\.0\/users\/me\?/;
-    
+
     await page.reload();
     const response = await page.waitForResponse(
       (response) => apiUrlPattern.test(response.url()) && response.status() === 200

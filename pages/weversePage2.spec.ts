@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import config from '../config.json';
+import config from '../weverseConfig.json';
 
 class weversePage2 {
 
@@ -101,7 +101,7 @@ class weversePage2 {
 
   async getResponse_wid() {
     const apiUrlPattern = /https:\/\/global\.apis\.naver\.com\/weverse\/wevweb\/users\/v1\.0\/users\/me\?/;
-    
+
     await this.page.reload();
     const response = await this.page.waitForResponse(
       (response) => apiUrlPattern.test(response.url()) && response.status() === 200

@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import { weversePage2 } from '../pages/weversePage2.spec';
-import config from '../config.json';
+import config from '../weverseConfig.json';
 
 const userEmail = config.email;
 const userPassword = config.password;
