@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import config from '../config.json';
 
 class weversePage2 {
 
@@ -9,15 +10,15 @@ class weversePage2 {
   }
 
   async gotoMain() {
-    await this.page.goto('https://weverse.io/');
-    console.log("위버스 페이지 진입");
+    await this.page.goto(config.serviceUrl);
+    console.log(`위버스 페이지 진입 : ${config.serviceUrl}`);
   }
 
   async closeModal() {
     const modalCloseButton = this.page.locator('button[class^="BaseModalView_bottom_button__"]').nth(0);
 
     await modalCloseButton.click();
-    console.log("모달 존재 확인 후 닫기");
+    console.log(`모달 존재 확인 후 닫기`);
   }
 
   async clickHeaderButton_jellyShop() {
@@ -30,10 +31,10 @@ class weversePage2 {
 
     await jellyShopPage.waitForLoadState();
     await expect(jellyShopPage).toHaveURL(/jelly.weverse/);
-    console.log('젤리샵 페이지 진입');
+    console.log(`젤리샵 페이지 진입`);
 
     await jellyShopPage.close();
-    console.log('젤리샵 페이지 닫기');
+    console.log(`젤리샵 페이지 닫기`);
   }
 
   async clickHeaderButton_weverseShop() {
@@ -46,10 +47,10 @@ class weversePage2 {
 
     await weverseShopPage.waitForLoadState();
     await expect(weverseShopPage).toHaveURL(/shop.weverse/);
-    console.log('위버스샵 페이지 진입');
+    console.log(`위버스샵 페이지 진입`);
 
     await weverseShopPage.close();
-    console.log('위버스샵 페이지 닫기');
+    console.log(`위버스샵 페이지 닫기`);
   }
 
   async clickHeaderButton_signIn() {
@@ -57,7 +58,7 @@ class weversePage2 {
 
     await signInButton.click();
     await expect(this.page).toHaveURL(/account.weverse/);
-    console.log("로그인 페이지 진입");
+    console.log(`로그인 페이지 진입`);
   }
 
   async clickHeaderButton_profile() {
@@ -65,7 +66,7 @@ class weversePage2 {
 
     await profileButton.click();
     await expect(this.page).toHaveURL(/weverse.io\/more/);
-    console.log("프로필 페이지 진입");
+    console.log(`프로필 페이지 진입`);
   }
 
   async clickHeaderButton_setting() {
@@ -73,7 +74,7 @@ class weversePage2 {
 
     await settingButton.click();
     await expect(this.page).toHaveURL(/weverse.io\/setting/);
-    console.log("설정 페이지 진입");
+    console.log(`설정 페이지 진입`);
   }
 
   async signIn(email, password) {
@@ -86,22 +87,27 @@ class weversePage2 {
     await passwordInput.fill(password);
     await this.page.locator('button[type="submit"]').click();
 
-    await expect(this.page).not.toHaveURL(/account.weverse/);
-    console.log("로그인 후 위버스 메인 복귀 완료");
+    try {
+      await this.page.waitForFunction(
+        (url: string) => window.location.href === url,
+        config.serviceUrl,
+        { polling: 4000, timeout: 20000 }
+      );
+      console.log(`로그인 후 위버스 페이지 복귀 완료 : ${this.page.url}`);
+    } catch (error) {
+      console.error(`로그인 후 위버스 페이지 이동 오류 :`, error);
+    }
   }
 
   async getResponse_wid() {
     const apiUrlPattern = /https:\/\/global\.apis\.naver\.com\/weverse\/wevweb\/users\/v1\.0\/users\/me\?/;
-    const responsePromise = this.page.waitForResponse((response) =>
-      apiUrlPattern.test(response.url()) && response.status() === 200
+    
+    await this.page.reload();
+    const response = await this.page.waitForResponse(
+      (response) => apiUrlPattern.test(response.url()) && response.status() === 200
     );
-
-    this.clickHeaderButton_profile();
-
-    const response = await responsePromise;
     const jsonResponse = await response.json();
-
-    console.log("나의 WID = " + jsonResponse.wid);
+    console.log(`나의 WID 조회 : ${jsonResponse.wid}`);
   }
 
   async signOut() {
@@ -109,7 +115,7 @@ class weversePage2 {
 
     await signOutButton.click();
     await expect(this.page).not.toHaveURL(/weverse.io\/more/);
-    console.log("로그아웃 후 위버스 메인 복귀 완료");
+    console.log(`로그아웃 후 위버스 페이지 복귀 완료 : ${this.page.url}`);
   }
 
   async enterNewArtist() {

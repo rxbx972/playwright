@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import config from '../config.json' assert { type: 'json' };
+import config from '../config.json';
 
 const mainUrl = config.serviceUrl;
 const userEmail = config.email;
@@ -41,7 +41,7 @@ test.describe('Weverse Test', () => {
         mainUrl,
         { polling: 4000, timeout: 20000 }
       );
-      console.log(`로그인 후 위버스 페이지 복귀 완료 : ${mainUrl}`);
+      console.log(`로그인 후 위버스 페이지 복귀 완료 : ${page.url}`);
     } catch (error) {
       console.error(`로그인 후 위버스 페이지 이동 오류 :`, error);
     }
@@ -53,7 +53,6 @@ test.describe('Weverse Test', () => {
       (response) => apiUrlPattern.test(response.url()) && response.status() === 200
     );
     const jsonResponse = await response.json();
-
     console.log(`나의 WID 조회 : ${jsonResponse.wid}`);
 
     const profileButton = page.locator('button[class^="HeaderView_profile_button__"]');
