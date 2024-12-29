@@ -77,6 +77,15 @@ class weverseCommunityPage {
     console.log(`커뮤니티 라이브탭 진입`);
   }
 
+  async clickArtistpedia() {
+    const artistpedia = this.page.locator('a[class^="CommunityAsideWelcomeView_community__"]');
+
+    await this.page.mouse.wheel(0, 1000);
+    await artistpedia.click();
+    await expect(this.page).toHaveURL(/artistpedia/);
+    console.log(`아티스트피디아 페이지 진입 확인`);
+  }
+
 }
 
 export { weverseCommunityPage }
