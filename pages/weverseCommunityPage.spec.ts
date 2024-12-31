@@ -86,6 +86,49 @@ class weverseCommunityPage {
     console.log(`아티스트피디아 페이지 진입 확인`);
   }
 
+  //PostHeaderView_nickname__
+  async checkFanTab_fanPost() {
+    const artistpedia = this.page.locator('a[class^="CommunityAsideWelcomeView_community__"]');
+
+    await this.page.mouse.wheel(0, 1000);
+    await artistpedia.click();
+    await expect(this.page).toHaveURL(/artistpedia/);
+    console.log(`아티스트피디아 페이지 진입 확인`);
+  }
+
+  //ArtistPostListItemView_artist_name__
+  async checkArtistTab_artistPost() {
+    const artistpedia = this.page.locator('a[class^="CommunityAsideWelcomeView_community__"]');
+
+    await this.page.mouse.wheel(0, 1000);
+    await artistpedia.click();
+    await expect(this.page).toHaveURL(/artistpedia/);
+    console.log(`아티스트피디아 페이지 진입 확인`);
+  }
+
+  //div MediaListView_container__
+  //ㄴ div MediaTitleView_title__
+  //ㄴ strong RelatedProductItemView_package_name__
+  async checkMediaTab_last() {
+    const artistpedia = this.page.locator('a[class^="CommunityAsideWelcomeView_community__"]');
+
+    await this.page.mouse.wheel(0, 1000);
+    await artistpedia.click();
+    await expect(this.page).toHaveURL(/artistpedia/);
+    console.log(`아티스트피디아 페이지 진입 확인`);
+  }
+
+  // RelatedProductItemView_pakage_detail__
+  //ㄴ strong RelatedProductItemView_package_name__-Xmh0
+  //ㄴ ReactionCountView_count_item__
+  async checkLiveTab_last() {
+    const artistpedia = this.page.locator('a[class^="CommunityAsideWelcomeView_community__"]');
+
+    await this.page.mouse.wheel(0, 1000);
+    await artistpedia.click();
+    await expect(this.page).toHaveURL(/artistpedia/);
+    console.log(`아티스트피디아 페이지 진입 확인`);
+  }
 }
 
 export { weverseCommunityPage }

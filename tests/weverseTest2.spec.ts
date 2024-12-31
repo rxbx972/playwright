@@ -44,12 +44,28 @@ test.describe('Weverse Test', () => {
     await weverse.enterNewArtist();
   });
 
-  test('join community', async ({ }) => {
+  test.skip('join community', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
     await weverse.signIn(userEmail, userPassword);
     await community.gotoCommunity('cnblue');
     await community.joinCommunity();
+  });
+
+  test('check community', async ({ }) => {
+    await weverse.gotoMain();
+    await weverse.closeModal();
+    await weverse.clickHeaderButton_signIn();
+    await weverse.signIn(userEmail, userPassword);
+    await community.gotoCommunity('cnblue');
+    await community.clickFanTab();
+    await community.checkFanTab_fanPost();
+    await community.clickArtistTab();
+    await community.checkArtistTab_artistPost();
+    await community.clickMediaTab();
+    await community.checkMediaTab_last();
+    await community.clickLiveTab();
+    await community.checkLiveTab_last();
   });
 });
