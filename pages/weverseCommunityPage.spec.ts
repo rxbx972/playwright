@@ -8,7 +8,9 @@ class weverseCommunityPage {
   constructor(page) {
     this.page = page;
   }
-
+  /**
+   * @param communityName
+   */
   async gotoCommunity(communityName) {
     await this.page.goto(config.serviceUrl + communityName);
     console.log(`${communityName} 커뮤니티 페이지 진입`);
@@ -36,8 +38,8 @@ class weverseCommunityPage {
     console.log(`커뮤니티 가입 완료`);
 
     const myNickname = await this.page.locator('[class^="CommunityAsideMyProfileView_name_text__"]').textContent();
+    
     await expect(myNickname).toEqual(nickname);
-
     console.log(`나의 커뮤니티 닉네임: ${myNickname}`);
   }
 
@@ -86,21 +88,32 @@ class weverseCommunityPage {
     console.log(`아티스트피디아 페이지 진입 확인`);
   }
 
-  async checkFanTab_fanPost() {
+  async checkFanTab_likePost() {
     const fanPost_like = this.page.locator('button[class^="EmotionButtonView_button_emotion__"]').nth(0);
 
     await fanPost_like.click();
     await expect(fanPost_like).toHaveAttribute('aria-pressed', 'true');
-    console.log(`팬탭 - 첫번째 팬포스트 좋아요 클릭 확인`);
+    console.log(`팬탭 - 첫번째 포스트 좋아요 클릭 확인`);
   }
 
-  async checkArtistTab_artistPost() {
+  async checkArtistTab_likePost() {
+    const artistPost_post = this.page.locator('[class^="ArtistPostListItemView_post_text_wrap__"]').nth(0);
     const artistPost_nickname = this.page.locator('[class^="ArtistPostListItemView_artist_name__"]').nth(0);
     const artistPost_like = this.page.locator('button[class^="EmotionButtonView_button_emotion__"]').nth(0);
-
+    const artistPostModal_like = this.page.locator('[class^="PostModalView_post_action__"]').locator('button[class^="EmotionButtonView_button_emotion__"]');
+    const artistPostModal_close = this.page.locator('button[class^="BaseModalView_close_button__"]');
+    
     await artistPost_like.click();
     await expect(artistPost_like).toHaveAttribute('aria-pressed', 'true');
     console.log(`아티스트탭 - '${await artistPost_nickname.textContent()}'의 포스트 좋아요 클릭 확인`);
+
+    await artistPost_post.click();
+    await expect(artistPostModal_like).toHaveAttribute('aria-pressed', 'true');
+    await artistPostModal_like.click();
+    await expect(artistPostModal_like).toHaveAttribute('aria-pressed', 'false');
+    await artistPostModal_close.click();
+    await expect(artistPost_like).toHaveAttribute('aria-pressed', 'false');
+    console.log(`아티스트탭 - '${await artistPost_nickname.textContent()}'의 포스트 좋아요 취소 확인`);
   }
 
   async checkMediaTab_newTab() {
@@ -137,16 +150,18 @@ class weverseCommunityPage {
     console.log(`미디어탭 - 전체 미디어 진입 확인`);
   }
 
-  // RelatedProductItemView_pakage_detail__
-  //ㄴ strong RelatedProductItemView_package_name__-Xmh0
-  //ㄴ ReactionCountView_count_item__
-  async checkLiveTab_last() {
-    const artistpedia = this.page.locator('a[class^="CommunityAsideWelcomeView_community__"]');
+  /**
+   * @param artistName
+   */
+  async checkLiveTab_lastLiveBy(artistName) {
+    const lastLive = this.page.locator('a[class^="LiveListView_live_item__"]').filter({ hasText: artistName }).nth(0);
+    const lastLiveBadge = this.page.locator('em[class*="LiveBadgeView_-replay__"]');
+    const lastLiveChat = this.page.locator('button[class^="PreviousLiveChatButtonView_show_chat_button__"]');
 
-    await this.page.mouse.wheel(0, 1000);
-    await artistpedia.click();
-    await expect(this.page).toHaveURL(/artistpedia/);
-    console.log(`아티스트피디아 페이지 진입 확인`);
+    await lastLive.click();
+    await expect(lastLiveBadge).toBeVisible();
+    await expect(lastLiveChat).toBeVisible();
+    console.log(`라이브탭 - '${artistName}'의 지난 라이브 진입 확인`);
   }
 }
 

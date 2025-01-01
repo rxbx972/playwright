@@ -21,7 +21,7 @@ test.afterEach(async ({ page }) => {
 
 test.describe('Weverse Test', () => {
 
-  test.skip('login and logout', async ({ }) => {
+  test('login and logout', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
@@ -31,20 +31,20 @@ test.describe('Weverse Test', () => {
     await weverse.signOut();
   });
 
-  test.skip('enter jellyshop and shop', async ({ }) => {
+  test('enter jellyshop and shop', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_jellyShop();
     await weverse.clickHeaderButton_weverseShop();
   });
 
-  test.skip('enter new artist', async ({ }) => {
+  test('enter new artist', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.enterNewArtist();
   });
 
-  test.skip('join community', async ({ }) => {
+  test('join community', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
@@ -53,44 +53,46 @@ test.describe('Weverse Test', () => {
     await community.joinCommunity();
   });
 
-  test('check community', async ({ }) => {
+  test('check community fan/artist tab', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
     await weverse.signIn(userEmail, userPassword);
     await community.gotoCommunity('enhypen');
     await community.clickFanTab();
-    await community.checkFanTab_fanPost();
+    await community.checkFanTab_likePost();
     await community.clickArtistTab();
-    await community.checkArtistTab_artistPost();
-    // await community.clickLiveTab();
-    // await community.checkLiveTab_last();
+    await community.checkArtistTab_likePost();
   });
 
-  test.skip('check community media tab', async ({ }) => {
+  test('check community media tab', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
     await weverse.signIn(userEmail, userPassword);
-
-    // 추천 미디어 없는 커뮤니티
     await community.gotoCommunity('plave');
     await community.clickMediaTab();
     await community.checkMediaTab_newTab();
     await community.checkMediaTab_membershipTab();
     await community.checkMediaTab_allTab();
-
-    // 멤버십 미디어 없는 커뮤니티
     await community.gotoCommunity('weversezone');
     await community.clickMediaTab();
     await community.checkMediaTab_newTab();
     await community.checkMediaTab_recommendTab();
     await community.checkMediaTab_allTab();
-
-    // 추천, 멤버십 미디어 없는 커뮤니티
     await community.gotoCommunity('conangray');
     await community.clickMediaTab();
     await community.checkMediaTab_newTab();
     await community.checkMediaTab_allTab();
+  });
+
+  test('check community live tab', async ({ }) => {
+    await weverse.gotoMain();
+    await weverse.closeModal();
+    await weverse.clickHeaderButton_signIn();
+    await weverse.signIn(userEmail, userPassword);
+    await community.gotoCommunity('nct127');
+    await community.clickLiveTab();
+    await community.checkLiveTab_lastLiveBy('도영');
   });
 });
