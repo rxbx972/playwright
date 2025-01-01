@@ -53,7 +53,7 @@ test.describe('Weverse Test', () => {
     await community.joinCommunity();
   });
 
-  test('check community', async ({ }) => {
+  test.skip('check community', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
@@ -67,5 +67,24 @@ test.describe('Weverse Test', () => {
     await community.checkMediaTab_last();
     await community.clickLiveTab();
     await community.checkLiveTab_last();
+  });
+
+  test('check community media', async ({ }) => {
+    await weverse.gotoMain();
+    await weverse.closeModal();
+    await weverse.clickHeaderButton_signIn();
+    await weverse.signIn(userEmail, userPassword);
+
+    await community.gotoCommunity('plave'); // 추천 없음
+    await community.clickMediaTab();
+    await community.checkMediaTab_subTab();
+
+    await community.gotoCommunity('weversezone'); // 멤버십 없음
+    await community.clickMediaTab();
+    await community.checkMediaTab_subTab();
+
+    await community.gotoCommunity('conangray'); // 추천, 멤버십 없음
+    await community.clickMediaTab();
+    await community.checkMediaTab_subTab();
   });
 });

@@ -34,15 +34,15 @@ class weverseCommunityPage {
     await nicknameConfirmButton.click();
     await expect(joinCommunityButton).not.toBe;
     console.log(`커뮤니티 가입 완료`);
-    
+
     const myNickname = await this.page.locator('[class^="CommunityAsideMyProfileView_name_text__"]').textContent();
     await expect(myNickname).toEqual(nickname);
-    
+
     console.log(`나의 커뮤니티 닉네임: ${myNickname}`);
   }
 
   async clickFanTab() {
-    const fanTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"] >> text=Fan');
+    const fanTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"]').filter({ hasText: 'Fan' });
 
     await fanTab.click();
     await expect(this.page).toHaveURL(/feed/);
@@ -51,7 +51,7 @@ class weverseCommunityPage {
   }
 
   async clickArtistTab() {
-    const artistTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"] >> text=Artist');
+    const artistTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"]').filter({ hasText: 'Artist' });
 
     await artistTab.click();
     await expect(this.page).toHaveURL(/artist/);
@@ -60,19 +60,19 @@ class weverseCommunityPage {
   }
 
   async clickMediaTab() {
-    const mediaTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"] >> text=Media');
+    const mediaTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"]').filter({ hasText: 'Media' });
 
     await mediaTab.click();
-    await expect(this.page).toHaveURL(/feed/);
+    await expect(this.page).toHaveURL(/media/);
     await expect(mediaTab).toHaveAttribute('aria-current', 'true');
     console.log(`커뮤니티 미디어탭 진입`);
   }
 
   async clickLiveTab() {
-    const liveTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"] >> text=LIVE');
+    const liveTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"]').filter({ hasText: 'LIVE' });
 
     await liveTab.click();
-    await expect(this.page).toHaveURL(/feed/);
+    await expect(this.page).toHaveURL(/live/);
     await expect(liveTab).toHaveAttribute('aria-current', 'true');
     console.log(`커뮤니티 라이브탭 진입`);
   }
@@ -86,36 +86,56 @@ class weverseCommunityPage {
     console.log(`아티스트피디아 페이지 진입 확인`);
   }
 
-  //PostHeaderView_nickname__
   async checkFanTab_fanPost() {
-    const artistpedia = this.page.locator('a[class^="CommunityAsideWelcomeView_community__"]');
+    const fanPost_like = this.page.locator('button[class^="EmotionButtonView_button_emotion__"]').nth(0);
 
-    await this.page.mouse.wheel(0, 1000);
-    await artistpedia.click();
-    await expect(this.page).toHaveURL(/artistpedia/);
-    console.log(`아티스트피디아 페이지 진입 확인`);
+    await fanPost_like.click();
+    await expect(fanPost_like).toHaveAttribute('aria-pressed', 'true');
+    console.log(`팬탭 - 첫번째 팬포스트 좋아요 클릭 확인`);
   }
 
-  //ArtistPostListItemView_artist_name__
   async checkArtistTab_artistPost() {
-    const artistpedia = this.page.locator('a[class^="CommunityAsideWelcomeView_community__"]');
+    const artistPost_nickname = this.page.locator('[class^="ArtistPostListItemView_artist_name__"]').nth(0);
+    const artistPost_like = this.page.locator('button[class^="EmotionButtonView_button_emotion__"]').nth(0);
 
-    await this.page.mouse.wheel(0, 1000);
-    await artistpedia.click();
-    await expect(this.page).toHaveURL(/artistpedia/);
-    console.log(`아티스트피디아 페이지 진입 확인`);
+    await artistPost_like.click();
+    await expect(artistPost_like).toHaveAttribute('aria-pressed', 'true');
+    console.log(`아티스트탭 - ${artistPost_nickname}의 포스트 좋아요 클릭 확인`);
   }
 
-  //div MediaListView_container__
-  //ㄴ div MediaTitleView_title__
-  //ㄴ strong RelatedProductItemView_package_name__
-  async checkMediaTab_last() {
-    const artistpedia = this.page.locator('a[class^="CommunityAsideWelcomeView_community__"]');
+  async checkMediaTab_subTab() {
+    const newTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'Latest Media' });
+    const recommendTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'Recommended Media' });
+    const membershipTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'Membership' });
+    const allTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'See All Media' });
 
-    await this.page.mouse.wheel(0, 1000);
-    await artistpedia.click();
-    await expect(this.page).toHaveURL(/artistpedia/);
-    console.log(`아티스트피디아 페이지 진입 확인`);
+    await newTab.click();
+    await expect(this.page).toHaveURL(/new/);
+    await expect(newTab).toHaveAttribute('aria-selected', 'true');
+    console.log(`미디어탭 - 최신 미디어 진입 확인`);
+
+    try {
+      await recommendTab.click();
+      await expect(this.page).toHaveURL(/recommend/);
+      await expect(recommendTab).toHaveAttribute('aria-selected', 'true');
+      console.log(`미디어탭 - 추천 미디어 진입 확인`);
+    } catch (error) {
+      console.log(`미디어탭 - 추천 미디어 확인 불가`);
+    }
+
+    try {
+      await membershipTab.click();
+      await expect(this.page).toHaveURL(/membership/);
+      await expect(membershipTab).toHaveAttribute('aria-selected', 'true');
+      console.log(`미디어탭 - 멤버십 진입 확인`);
+    } catch (error) {
+      console.log(`미디어탭 - 멤버십 확인 불가`);
+    }
+
+    await allTab.click();
+    await expect(this.page).toHaveURL(/all/);
+    await expect(allTab).toHaveAttribute('aria-selected', 'true');
+    console.log(`미디어탭 - 전체 미디어 진입 확인`);
   }
 
   // RelatedProductItemView_pakage_detail__
