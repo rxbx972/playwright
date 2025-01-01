@@ -100,37 +100,36 @@ class weverseCommunityPage {
 
     await artistPost_like.click();
     await expect(artistPost_like).toHaveAttribute('aria-pressed', 'true');
-    console.log(`아티스트탭 - ${artistPost_nickname}의 포스트 좋아요 클릭 확인`);
+    console.log(`아티스트탭 - '${await artistPost_nickname.textContent()}'의 포스트 좋아요 클릭 확인`);
   }
 
-  async checkMediaTab_subTab() {
+  async checkMediaTab_newTab() {
     const newTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'Latest Media' });
-    const recommendTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'Recommended Media' });
-    const membershipTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'Membership' });
-    const allTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'See All Media' });
 
     await newTab.click();
     await expect(this.page).toHaveURL(/new/);
     await expect(newTab).toHaveAttribute('aria-selected', 'true');
     console.log(`미디어탭 - 최신 미디어 진입 확인`);
+  }
 
-    try {
-      await recommendTab.click();
-      await expect(this.page).toHaveURL(/recommend/);
-      await expect(recommendTab).toHaveAttribute('aria-selected', 'true');
-      console.log(`미디어탭 - 추천 미디어 진입 확인`);
-    } catch (error) {
-      console.log(`미디어탭 - 추천 미디어 확인 불가`);
-    }
+  async checkMediaTab_recommendTab() {
+    const recommendTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'Recommended Media' });
+    await recommendTab.click();
+    await expect(this.page).toHaveURL(/recommend/);
+    await expect(recommendTab).toHaveAttribute('aria-selected', 'true');
+    console.log(`미디어탭 - 추천 미디어 진입 확인`);
+  }
 
-    try {
-      await membershipTab.click();
-      await expect(this.page).toHaveURL(/membership/);
-      await expect(membershipTab).toHaveAttribute('aria-selected', 'true');
-      console.log(`미디어탭 - 멤버십 진입 확인`);
-    } catch (error) {
-      console.log(`미디어탭 - 멤버십 확인 불가`);
-    }
+  async checkMediaTab_membershipTab() {
+    const membershipTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'Membership' });
+    await membershipTab.click();
+    await expect(this.page).toHaveURL(/membership/);
+    await expect(membershipTab).toHaveAttribute('aria-selected', 'true');
+    console.log(`미디어탭 - 멤버십 진입 확인`);
+  }
+
+  async checkMediaTab_allTab() {
+    const allTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'See All Media' });
 
     await allTab.click();
     await expect(this.page).toHaveURL(/all/);

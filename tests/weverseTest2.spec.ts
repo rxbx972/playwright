@@ -53,38 +53,44 @@ test.describe('Weverse Test', () => {
     await community.joinCommunity();
   });
 
-  test.skip('check community', async ({ }) => {
+  test('check community', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
     await weverse.signIn(userEmail, userPassword);
-    await community.gotoCommunity('cnblue');
+    await community.gotoCommunity('enhypen');
     await community.clickFanTab();
     await community.checkFanTab_fanPost();
     await community.clickArtistTab();
     await community.checkArtistTab_artistPost();
-    await community.clickMediaTab();
-    await community.checkMediaTab_last();
-    await community.clickLiveTab();
-    await community.checkLiveTab_last();
+    // await community.clickLiveTab();
+    // await community.checkLiveTab_last();
   });
 
-  test('check community media', async ({ }) => {
+  test.skip('check community media tab', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
     await weverse.signIn(userEmail, userPassword);
 
-    await community.gotoCommunity('plave'); // 추천 없음
+    // 추천 미디어 없는 커뮤니티
+    await community.gotoCommunity('plave');
     await community.clickMediaTab();
-    await community.checkMediaTab_subTab();
+    await community.checkMediaTab_newTab();
+    await community.checkMediaTab_membershipTab();
+    await community.checkMediaTab_allTab();
 
-    await community.gotoCommunity('weversezone'); // 멤버십 없음
+    // 멤버십 미디어 없는 커뮤니티
+    await community.gotoCommunity('weversezone');
     await community.clickMediaTab();
-    await community.checkMediaTab_subTab();
+    await community.checkMediaTab_newTab();
+    await community.checkMediaTab_recommendTab();
+    await community.checkMediaTab_allTab();
 
-    await community.gotoCommunity('conangray'); // 추천, 멤버십 없음
+    // 추천, 멤버십 미디어 없는 커뮤니티
+    await community.gotoCommunity('conangray');
     await community.clickMediaTab();
-    await community.checkMediaTab_subTab();
+    await community.checkMediaTab_newTab();
+    await community.checkMediaTab_allTab();
   });
 });
