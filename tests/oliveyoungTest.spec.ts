@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import config from '../oliveyoungConfig.json';
-import exp from 'constants';
 
 const mainUrl = config.serviceUrl;
 const userEmail = config.email;
@@ -55,11 +54,15 @@ test.describe('Olive Young Test', () => {
     await expect(searchResult).toContainText(searchKeyword);
     console.log(`검색결과 페이지 이동 확인 완료`);
 
-    const brandFilter = page.locator('#search').locator('label').filter({ hasText: searchBrand});
-    const filterOption = page.locator('[class="selected_option"]').locator('button').filter({ hasText: searchBrand});
+    const filter_brand = page.locator('#search').locator('label').filter({ hasText: searchBrand});
+    const chip_today = page.locator('#search').locator('label').filter({ hasText: "오늘드림"});
+    const chip_smell = page.locator('#search').locator('label').filter({ hasText: "향"});
+    const filterOption = page.locator('[class="selected_option"]').locator('button');
 
-    await brandFilter.click();
-    await expect(filterOption).toBeVisible();
+    await filter_brand.click();
+    await expect(await filterOption.filter({ hasText: searchBrand})).toBeVisible();
+    await chip_today.click();
+    await expect(await filterOption.filter({ hasText: "오늘드림"})).toBeVisible();
     console.log(`필터 적용 확인 완료`);
   });
 });
