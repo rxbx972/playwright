@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import config from '../oliveyoungConfig.json';
+import exp from 'constants';
 
 const mainUrl = config.serviceUrl;
 const userEmail = config.email;
@@ -13,11 +14,11 @@ test.beforeEach(async ({ page }) => {
 test.afterEach(async ({ page }) => {
   await page.close();
   console.log(`올리브영 테스트 종료`);
-})
+});
 
 test.describe('Olive Young Test', () => {
 
-  test('로그인 완료', async ({ page }) => {
+  test('로그인 테스트', async ({ page }) => {
     const login = page.locator('li[class="login"]').filter({ hasText: '로그인'});
     const logout = page.locator('li[class="logout"]').locator('a').filter({ hasText: '로그아웃'});
     const userName = page.locator('li[class="logout"]').locator('strong');
@@ -39,5 +40,26 @@ test.describe('Olive Young Test', () => {
 
     await expect(userName).toContainText('김지연');
     console.log(`사용자 명 확인 완료`);
+  });
+
+  test('검색 테스트', async ({ page }) => {
+    const searchKeyword = "핸드크림"
+    const searchBrand = "카밀"
+
+    const searchInput = page.locator('input[class="header_search_input"]');
+    const searchButton = page.locator('button[id="searchSubmit"]');
+    const searchResult = page.locator('p[class="resultTxt"]').filter({ hasText: '검색결과'});
+
+    await searchInput.fill(searchKeyword);
+    await searchButton.click();
+    await expect(searchResult).toContainText(searchKeyword);
+    console.log(`검색결과 페이지 이동 확인 완료`);
+
+    const brandFilter = page.locator('#search').locator('label').filter({ hasText: searchBrand});
+    const filterOption = page.locator('[class="selected_option"]').locator('button').filter({ hasText: searchBrand});
+
+    await brandFilter.click();
+    await expect(filterOption).toBeVisible();
+    console.log(`필터 적용 확인 완료`);
   });
 });

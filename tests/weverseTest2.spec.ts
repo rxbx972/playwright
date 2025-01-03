@@ -12,7 +12,7 @@ let community;
 test.beforeEach(async ({ page }) => {
   weverse = new weversePage2(page);
   community = new weverseCommunityPage(page);
-})
+});
 
 test.afterEach(async ({ page }) => {
   await page.close();
