@@ -65,4 +65,21 @@ test.describe('Olive Young Test', () => {
     await expect(await filterOption.filter({ hasText: "오늘드림"})).toBeVisible();
     console.log(`필터 적용 확인 완료`);
   });
+
+  test('추천상품 테스트', async ({ page }) => {
+    const curation1MoreButton = page.locator('button[id="crt_more_p002"]');
+    const curation2MoreButton = page.locator('button[id="crt_more_m002"]');
+    const popTitle = page.locator('[id="popTitle"]');
+    const popCloseButton = page.locator('button[class="layer_close type4"]');
+    
+    await curation1MoreButton.click();
+    await expect(popTitle).toHaveText("요즘 주목 받는 상품");
+    await popCloseButton.click();
+    console.log(`요즘 주목 받는 상품 리스트 확인 완료`);
+
+    await curation2MoreButton.click();
+    await expect(popTitle).toHaveText("다른 고객님이 많이 구매한 상품");
+    await popCloseButton.click();
+    console.log(`다른 고객님이 많이 구매한 상품 리스트 확인 완료`);
+  });
 });
