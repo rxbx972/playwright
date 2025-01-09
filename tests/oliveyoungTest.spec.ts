@@ -82,4 +82,14 @@ test.describe('Olive Young Test', () => {
     await popCloseButton.click();
     console.log(`다른 고객님이 많이 구매한 상품 리스트 확인 완료`);
   });
+
+  test('브랜드관 테스트', async ({ page }) => {
+    // 주목해야할 브랜드
+    // #swiper-wrapper-bbe28a68b77d355b > div.main_brand.swiper-slide.swiper-slide-active > div > a
+    const curation1MoreButton = page.locator('button[id="crt_more_p002"]');
+    const curation2MoreButton = page.locator('button[id="crt_more_m002"]');
+    const popTitle = page.locator('[id="popTitle"]');
+    const popCloseButton = page.locator('button[class="layer_close type4"]');
+    
+  });
 });
