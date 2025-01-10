@@ -53,46 +53,41 @@ test.describe('Weverse Test', () => {
     await community.joinCommunity();
   });
 
-  test('check community fan/artist tab', async ({ }) => {
+  test('check community', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
     await weverse.signIn(userEmail, userPassword);
-    await community.gotoCommunity('enhypen');
-    await community.clickFanTab();
-    await community.checkFanTab_likePost();
-    await community.clickArtistTab();
-    await community.checkArtistTab_likePost();
-  });
 
-  test('check community media tab', async ({ }) => {
-    await weverse.gotoMain();
-    await weverse.closeModal();
-    await weverse.clickHeaderButton_signIn();
-    await weverse.signIn(userEmail, userPassword);
-    await community.gotoCommunity('plave');
-    await community.clickMediaTab();
-    await community.checkMediaTab_newTab();
-    await community.checkMediaTab_membershipTab();
-    await community.checkMediaTab_allTab();
-    await community.gotoCommunity('weversezone');
-    await community.clickMediaTab();
-    await community.checkMediaTab_newTab();
-    await community.checkMediaTab_recommendTab();
-    await community.checkMediaTab_allTab();
-    await community.gotoCommunity('conangray');
-    await community.clickMediaTab();
-    await community.checkMediaTab_newTab();
-    await community.checkMediaTab_allTab();
-  });
+    test('fan/artist tab', async ({ }) => {
+      await community.gotoCommunity('enhypen');
+      await community.clickFanTab();
+      await community.checkFanTab_likePost();
+      await community.clickArtistTab();
+      await community.checkArtistTab_likePost();
+    });
 
-  test('check community live tab', async ({ }) => {
-    await weverse.gotoMain();
-    await weverse.closeModal();
-    await weverse.clickHeaderButton_signIn();
-    await weverse.signIn(userEmail, userPassword);
-    await community.gotoCommunity('nct127');
-    await community.clickLiveTab();
-    await community.checkLiveTab_lastLiveBy('도영');
+    test('media tab', async ({ }) => {
+      await community.gotoCommunity('plave');
+      await community.clickMediaTab();
+      await community.checkMediaTab_newTab();
+      await community.checkMediaTab_membershipTab();
+      await community.checkMediaTab_allTab();
+      await community.gotoCommunity('weversezone');
+      await community.clickMediaTab();
+      await community.checkMediaTab_newTab();
+      await community.checkMediaTab_recommendTab();
+      await community.checkMediaTab_allTab();
+      await community.gotoCommunity('conangray');
+      await community.clickMediaTab();
+      await community.checkMediaTab_newTab();
+      await community.checkMediaTab_allTab();
+    });
+
+    test('live tab', async ({ }) => {
+      await community.gotoCommunity('nct127');
+      await community.clickLiveTab();
+      await community.checkLiveTab_lastLiveBy('도영');
+    });
   });
 });
