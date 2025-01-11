@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import config from '../ohouConfig.json';
+import config from '../config/ohouConfig.json';
 
 class ohouHomePage {
 
@@ -74,6 +74,29 @@ class ohouHomePage {
   }
 
   async clickHeader_profile_signOut() {
+    const profileMenu = this.page.getByLabel('프로필 메뉴');
+    const logoutButton = this.page.getByRole('button', { name: '로그아웃' });
+    const loginButton = this.page.getByRole('link', { name: '로그인' });
+
+    await profileMenu.click();
+    await logoutButton.click();
+    await expect(loginButton).toBeVisible();
+    console.log(`로그아웃 완료 확인`);
+  }
+
+  async scrapContents() {
+    const profileMenu = this.page.getByLabel('scrap 토글 버튼');
+    const logoutButton = this.page.getByRole('button', { name: '로그아웃' });
+    const loginButton = this.page.getByRole('link', { name: '로그인' });
+
+    await profileMenu.click();
+    await logoutButton.click();
+    await expect(loginButton).toBeVisible();
+    console.log(`로그아웃 완료 확인`);
+  }
+
+  async scrapProject() {
+    // css-11ab5xd e1fm144d0
     const profileMenu = this.page.getByLabel('프로필 메뉴');
     const logoutButton = this.page.getByRole('button', { name: '로그아웃' });
     const loginButton = this.page.getByRole('link', { name: '로그인' });

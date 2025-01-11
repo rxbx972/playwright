@@ -1,7 +1,5 @@
-weverseConfig.json
-oliveyoungConfig.json
-ohouConfig.json
 node_modules/
+/config/
 /test-results/
 /playwright-report/
 /blob-report/

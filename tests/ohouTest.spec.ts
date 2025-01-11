@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 import { ohouHomePage } from '../pages/ohouHomePage.spec';
 import { ohouMyPage } from '../pages/ohouMyPage.spec';
-import config from '../ohouConfig.json';
+import config from '../config/ohouConfig.json';
 
 const userEmail = config.email;
 const userPassword = config.password;
