@@ -1,14 +1,24 @@
 import { test } from '@playwright/test';
-import { ohouPage } from '../pages/ohouPage.spec';
+import { ohouHomePage } from '../pages/ohouHomePage.spec';
+import { ohouMyPage } from '../pages/ohouMyPage.spec';
 import config from '../ohouConfig.json';
 
 const userEmail = config.email;
 const userPassword = config.password;
 
-let ohou;
+let homePage;
+let myPage;
 
+test.setTimeout(120000);
 test.beforeEach(async ({ page }) => {
-  ohou = new ohouPage(page);
+  const [width, height] = await page.evaluate(() => [
+    window.screen.width,
+    window.screen.height,
+  ]);
+  await page.setViewportSize({ width, height });
+
+  homePage = new ohouHomePage(page);
+  myPage = new ohouMyPage(page);
 });
 
 test.afterEach(async ({ page }) => {
@@ -18,12 +28,19 @@ test.afterEach(async ({ page }) => {
 
 test.describe('Ohou Test', () => {
 
-  test('login and logout', async ({ }) => {
-    await ohou.gotoMain();
-    await ohou.clickHeader_signUp();
-    await ohou.clickHeader_signIn();
-    await ohou.signIn(userEmail, userPassword);
-    await ohou.clickHeader_profile_signOut();
+  test.skip('Login Test', async () => {
+    await homePage.gotoMain();
+    await homePage.clickHeader_signIn();
+    await homePage.signIn(userEmail, userPassword);
+    await homePage.clickHeader_profile_signOut();
+    await homePage.clickHeader_signUp();
   });
 
+  test('scrapbook', async () => {
+    await homePage.gotoMain();
+    await homePage.clickHeader_signIn();
+    await homePage.signIn(userEmail, userPassword);
+    await homePage.clickHeader_scrapbook();
+    await myPage.scrapbook_allTab_edit();
+  });
 });

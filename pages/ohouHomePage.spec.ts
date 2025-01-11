@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import config from '../ohouConfig.json';
 
-class ohouPage {
+class ohouHomePage {
 
   page: any;
 
@@ -55,6 +55,24 @@ class ohouPage {
     console.log(`오늘의집 홈 복귀 완료 확인`);
   }
 
+  async clickHeader_scrapbook() {
+    const scrapbookButton = this.page.getByRole('link', { name: '스크랩북 페이지 링크 버튼' });
+
+    await scrapbookButton.click();
+    await expect(this.page).toHaveURL(/users\/\d{8}\/collections/);
+    console.log(`스크랩북 페이지 진입 확인`);
+  }
+
+  async clickHeader_profile_myPage() {
+    const profileMenu = this.page.getByLabel('프로필 메뉴');
+    const myPageButton = this.page.getByRole('link', { name: '마이페이지' });
+
+    await profileMenu.click();
+    await myPageButton.click();
+    await expect(this.page).toHaveURL(/users\/\d{8}/);
+    console.log(`마이페이지 진입 확인`);
+  }
+
   async clickHeader_profile_signOut() {
     const profileMenu = this.page.getByLabel('프로필 메뉴');
     const logoutButton = this.page.getByRole('button', { name: '로그아웃' });
@@ -67,4 +85,4 @@ class ohouPage {
   }
 }
 
-export { ohouPage }
+export { ohouHomePage }
