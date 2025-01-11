@@ -36,10 +36,11 @@ test.describe('Ohou Test', () => {
     await homePage.clickHeader_signUp();
   });
 
-  test('scrapbook', async () => {
+  test('Scrapbook Taet', async () => {
     await homePage.gotoMain();
     await homePage.clickHeader_signIn();
     await homePage.signIn(userEmail, userPassword);
+    // await homePage.scrap()
     await homePage.clickHeader_scrapbook();
     await myPage.scrapbook_allTab_edit();
   });
