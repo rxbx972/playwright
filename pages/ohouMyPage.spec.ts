@@ -23,8 +23,84 @@ class ohouMyPage {
     await this.checkAllVirtualizedCheckboxes();
   }
 
-  /* 마지막 체크된 요소에 자동 스크롤 & 화면에 표기되기까지 대기 */
   async checkAllVirtualizedCheckboxes() {
+    let k = 0;
+    const processedContents = new Set<string>();
+    
+    // 첫 번째 체크박스를 찾기
+    const firstCheckbox = await this.page.locator('div[class="css-3q4ecs e1e5aqb12"]').first();
+    let currentElement = firstCheckbox;
+  
+    while (currentElement) {
+      if (!currentElement) {
+        console.log("currentElement가 null 또는 undefined입니다.");
+        break;
+      }
+      // 현재 요소에서 href 값을 가져옵니다.
+      const href = await currentElement.locator('a').evaluate(el => el.getAttribute('href'));
+  
+      // 이미 체크한 요소는 건너뛰기
+      if (processedContents.has(href)) {
+        console.log(':: 이미 체크한 항목: ' + href);
+        
+        // 다음 항목으로 이동
+        // currentElement = await currentElement.locator('xpath=following-sibling::div[@class="css-3q4ecs e1e5aqb12"]').first();
+        currentElement = await currentElement.locator('//following-sibling::div[@class="css-3q4ecs e1e5aqb12"]');
+        await currentElement.waitFor({ timeout: 3000 }); // 3초 대기
+        console.log(':: 다음 항목으로 이동 ::');
+        continue;
+      }
+
+      // 새로 체크할 요소인 경우
+      if (!processedContents.has(href)) {
+        const checkbox = currentElement.locator('input[type="checkbox"].css-f3z39x');
+        
+        // 체크박스가 화면에 보이지 않으면 스크롤
+        await currentElement.scrollIntoViewIfNeeded();
+        console.log(':: ㄴ 스크롤 이동 ::');
+        
+        // 체크하고, 체크가 되었는지 확인
+        await checkbox.check();
+        await expect(checkbox).toBeChecked();
+        console.log(':: ' + (++k) + ' 번째 체크 완료 :: ');
+  
+        // 체크한 후 processedContents에 추가
+        processedContents.add(href);
+      }
+
+      try {
+        // 다음 항목으로 이동
+      // currentElement = await currentElement.locator('xpath=following-sibling::div[@class="css-3q4ecs e1e5aqb12"]').first();
+      currentElement = await currentElement.locator('//following-sibling::div[@class="css-3q4ecs e1e5aqb12"]');
+
+        // 다음 요소가 보일 때까지 기다리기
+        await currentElement.waitFor({ timeout: 3000 }); // 3초 대기
+        console.log(':: 다음 항목으로 이동 ::');
+
+      } catch (error) {
+        console.error("에러 발생:", error);
+        break;  // 예외가 발생하면 종료하거나 다른 처리를 할 수 있습니다.
+      }
+
+      // 더 이상 체크할 항목이 없으면 종료
+      if (!currentElement) {
+        console.log(':: 더 이상 체크할 항목이 없음 ::');
+        break;
+      }
+  
+      // 자동 스크롤 후, 새로 로드된 요소가 체크되어야 하므로 잠시 대기
+      await this.page.waitForTimeout(500);
+  
+      // // 새로 로드된 요소가 화면에 나타났는지 확인
+      // const newElementsLoaded = await this.page.locator('div[class="css-3q4ecs e1e5aqb12"]').count();
+      // console.log(':: 새로 로드된 요소 개수: ' + newElementsLoaded);
+    }
+  }
+  
+
+
+  /* 마지막 체크된 요소에 자동 스크롤 & 화면에 표기되기까지 대기 */
+  async checkAllVirtualizedCheckboxes4() {
     let k = 0;
     const processedContents = new Set<string>();
     const renderedElements = new Set<string>();
