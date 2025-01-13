@@ -151,6 +151,19 @@ class ohouHomePage {
     } catch {
       console.log(`Empty Text가 노출되지 않습니다.`);
     }
+
+    const folderSettingButton = this.page.locator('button', { hasText: '설정' });
+    const folderDeleteButton = this.page.locator('button', { hasText: '폴더 삭제하기' });
+    const deleteButton = this.page.locator('button', { hasText: '확인' });
+
+    await folderSettingButton.click();
+    await expect(folderDeleteButton).toBeVisible();
+    await folderDeleteButton.click();
+    await deleteButton.click();
+    console.log(`스크랩북 폴더 삭제 확인`);
+
+    await expect(this.page).toHaveURL(/users\/\d{8}\/collections/);
+    console.log(`스크랩북 페이지 진입 확인`);
   }
 
   async scrapProject() {
@@ -184,12 +197,34 @@ class ohouHomePage {
     const moveButton = this.page.getByRole('button', { name: '폴더이동' });
     const deleteButton = this.page.getByRole('button', { name: '삭제' });
     const cancelButton = this.page.getByRole('button', { name: '취소' });
+    const unscrapText = this.page.getByText('스크랩북에서 삭제되었습니다.');
+    const emptyText = this.page.getByText('아직 스크랩한 콘텐츠가 없습니다.');
 
     await editButton.click();
     await expect(cancelButton).toBeVisible();
     console.log('스크랩북 편집 모드 전환 확인');
 
+    const scrapItem = this.page.locator('div[class="css-3q4ecs e1e5aqb12"]');
+    const scrapItemCheckbox = scrapItem.locator('input[type="checkbox"].css-f3z39x');
 
+    await scrapItemCheckbox.check();
+    await expect(scrapItemCheckbox).toBeChecked();
+    console.log('스크랩 아이템 선택 확인');
+
+    this.page.on('dialog', async dialog => {
+      await this.page.waitForTimeout(1000);
+      await dialog.accept(); 
+    });
+
+    await deleteButton.click();
+    await expect(unscrapText).toBeVisible();
+
+    try {
+      await expect(emptyText).toBeVisible();
+      console.log(`Empty Text 확인`);
+    } catch {
+      console.log(`Empty Text가 노출되지 않습니다.`);
+    }
   }
 }
 
