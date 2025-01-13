@@ -45,6 +45,12 @@ test.describe('Ohou Test', () => {
     await homePage.gotoMain();
     await homePage.scrapProject();
     await homePage.unscrapProject();
+    await homePage.gotoMain();
+    await homePage.scrapProductions();
+    await homePage.unscrapProductions();
+    await homePage.gotoMain();
+    await homePage.scrapExhibition();
+    await homePage.unscrapExhibition();
     
     // await homePage.clickHeader_scrapbook();
     // await myPage.scrapbook_allTab_edit();
