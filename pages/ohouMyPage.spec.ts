@@ -23,13 +23,16 @@ class ohouMyPage {
     await this.checkAllVirtualizedCheckboxes();
   }
 
+  /* 내가 방금 체크한 요소의 다음형제를 찾는 방식 */
   async checkAllVirtualizedCheckboxes() {
     let k = 0;
     const processedContents = new Set<string>();
+    const nextElement = '//following-sibling::div[@class="css-3q4ecs e1e5aqb12"]';
+    // 'xpath=following-sibling::div[@class="css-3q4ecs e1e5aqb12"]'
     
     // 첫 번째 체크박스를 찾기
-    const firstCheckbox = await this.page.locator('div[class="css-3q4ecs e1e5aqb12"]').first();
-    let currentElement = firstCheckbox;
+    const firstElement = await this.page.locator('div[class="css-3q4ecs e1e5aqb12"]').first();
+    let currentElement = firstElement;
   
     while (currentElement) {
       if (!currentElement) {
@@ -38,14 +41,14 @@ class ohouMyPage {
       }
       // 현재 요소에서 href 값을 가져옵니다.
       const href = await currentElement.locator('a').evaluate(el => el.getAttribute('href'));
+      console.log(':: href: ' + href);
   
       // 이미 체크한 요소는 건너뛰기
       if (processedContents.has(href)) {
-        console.log(':: 이미 체크한 항목: ' + href);
+        console.log(':: 이미 체크한 항목 ::');
         
         // 다음 항목으로 이동
-        // currentElement = await currentElement.locator('xpath=following-sibling::div[@class="css-3q4ecs e1e5aqb12"]').first();
-        currentElement = await currentElement.locator('//following-sibling::div[@class="css-3q4ecs e1e5aqb12"]');
+        currentElement = await currentElement.locator(nextElement).first();
         await currentElement.waitFor({ timeout: 3000 }); // 3초 대기
         console.log(':: 다음 항목으로 이동 ::');
         continue;
@@ -70,11 +73,10 @@ class ohouMyPage {
 
       try {
         // 다음 항목으로 이동
-      // currentElement = await currentElement.locator('xpath=following-sibling::div[@class="css-3q4ecs e1e5aqb12"]').first();
-      currentElement = await currentElement.locator('//following-sibling::div[@class="css-3q4ecs e1e5aqb12"]');
+      currentElement = await currentElement.locator(nextElement).first();
 
         // 다음 요소가 보일 때까지 기다리기
-        await currentElement.waitFor({ timeout: 3000 }); // 3초 대기
+        // await currentElement.waitFor({ timeout: 3000 }); // 3초 대기
         console.log(':: 다음 항목으로 이동 ::');
 
       } catch (error) {

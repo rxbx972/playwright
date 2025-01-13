@@ -40,8 +40,12 @@ test.describe('Ohou Test', () => {
     await homePage.gotoMain();
     await homePage.clickHeader_signIn();
     await homePage.signIn(userEmail, userPassword);
-    // await homePage.scrap()
-    await homePage.clickHeader_scrapbook();
-    await myPage.scrapbook_allTab_edit();
+    await homePage.scrapContents();
+    await homePage.unscrapContents();
+    await homePage.gotoMain();
+    await homePage.scrapProject();
+    await homePage.unscrapProject();
+    // await homePage.clickHeader_scrapbook();
+    // await myPage.scrapbook_allTab_edit();
   });
 });
