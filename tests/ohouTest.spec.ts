@@ -11,12 +11,6 @@ let myPage;
 
 test.setTimeout(120000);
 test.beforeEach(async ({ page }) => {
-  const [width, height] = await page.evaluate(() => [
-    window.screen.width,
-    window.screen.height,
-  ]);
-  await page.setViewportSize({ width, height });
-
   homePage = new ohouHomePage(page);
   myPage = new ohouMyPage(page);
 });
@@ -28,7 +22,7 @@ test.afterEach(async ({ page }) => {
 
 test.describe('Ohou Test', () => {
 
-  test.skip('Login Test', async () => {
+  test('Login and Logout Test', async () => {
     await homePage.gotoMain();
     await homePage.clickHeader_signIn();
     await homePage.signIn(userEmail, userPassword);
@@ -36,7 +30,7 @@ test.describe('Ohou Test', () => {
     await homePage.clickHeader_signUp();
   });
 
-  test('Scrapbook Taet', async () => {
+  test('Scrapbook Test', async () => {
     await homePage.gotoMain();
     await homePage.clickHeader_signIn();
     await homePage.signIn(userEmail, userPassword);
@@ -51,8 +45,5 @@ test.describe('Ohou Test', () => {
     await homePage.gotoMain();
     await homePage.scrapExhibition();
     await homePage.unscrapExhibition();
-    
-    // await homePage.clickHeader_scrapbook();
-    // await myPage.scrapbook_allTab_edit();
   });
 });

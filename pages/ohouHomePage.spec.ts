@@ -1,6 +1,5 @@
 import { expect } from '@playwright/test';
 import config from '../config/ohouConfig.json';
-import exp from 'constants';
 
 class ohouHomePage {
 
@@ -120,10 +119,6 @@ class ohouHomePage {
     await scrapbookButton.click();
     await expect(this.page).toHaveURL(/collection_books\/\d{8}/);
     console.log(`스크랩북 폴더 페이지 진입 확인`);
-
-    // await this.page.goBack();
-    // await expect(this.page).not.toHaveURL(/collection_books/);
-    // console.log(`오늘의집 홈 복귀 완료 확인`);
   }
 
   async unscrapContents() {
@@ -186,10 +181,6 @@ class ohouHomePage {
     await scrapbookButton.click();
     await expect(this.page).toHaveURL(/users\/\d{8}\/collections/);
     console.log(`스크랩북 페이지 진입 확인`);
-
-    // await this.page.goBack();
-    // await expect(this.page).not.toHaveURL(/collections/);
-    // console.log(`오늘의집 홈 복귀 완료 확인`);
   }
 
   async unscrapProject() {
