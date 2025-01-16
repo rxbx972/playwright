@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import config from '../weverseConfig.json';
+import config from '../config/weverseConfig.json';
 
 const mainUrl = config.serviceUrl;
 const userEmail = config.email;

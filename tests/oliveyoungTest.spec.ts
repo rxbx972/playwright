@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import config from '../oliveyoungConfig.json';
+import config from '../config/oliveyoungConfig.json';
 
 const mainUrl = config.serviceUrl;
 const userEmail = config.email;
