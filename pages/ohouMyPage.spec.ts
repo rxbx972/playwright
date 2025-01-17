@@ -8,19 +8,134 @@ class ohouMyPage {
     this.page = page;
   }
 
+  /** 기존 폴더로 이동 */
+  async scrap_moveFolder() {
+    const scrapFolderButton = this.page.locator('button', { hasText: '폴더에 담기' });
+    const newFolderButton = this.page.locator('button', { hasText: '새로운 폴더 추가하기' });
+    const folderNameInput = this.page.locator('input[class="css-1qgt0b9 e1tlor0y0"]');
+    const saveButton = this.page.locator('button', { hasText: '완료' });
+    const moveButton = this.page.locator('button', { hasText: '확인' });
+    const scrapbookButton = this.page.locator('button', { hasText: '스크랩북 보기' });
+
+    await scrapFolderButton.click();
+    await expect(newFolderButton).toBeVisible();
+    // await newFolderButton.click();
+    // await folderNameInput.fill(folderName);
+    // await saveButton.click();
+    // console.log(`스크랩북 폴더 생성 확인`);
+
+    // await expect(saveText).toBeVisible();
+    // await moveButton.click();
+    // await expect(moveText).toBeVisible();
+    // console.log(`스크랩북 폴더 이동 확인`);
+
+    // await scrapbookButton.click();
+    // await expect(this.page).toHaveURL(/collection_books\/\d{8}/);
+    // console.log(`스크랩북 폴더 페이지 진입 확인`);
+  }
+
+  /** 새로운 폴더 생성 후 이동 */
+  async scrap_newFolder() {
+    const folderName = 'New Folder'
+    const scrapFolderButton = this.page.locator('button', { hasText: '폴더에 담기' });
+    const newFolderButton = this.page.locator('button', { hasText: '새로운 폴더 추가하기' });
+    const folderNameInput = this.page.locator('input[class="css-1qgt0b9 e1tlor0y0"]');
+    const saveButton = this.page.locator('button', { hasText: '완료' });
+    const saveText = this.page.getByText(`선택한 컨텐츠를 '${folderName}'으로 이동하시겠습니까?`);
+    const moveButton = this.page.locator('button', { hasText: '확인' });
+    const moveText = this.page.getByText(`'${folderName}'폴더로 이동했습니다.`);
+    const scrapbookButton = this.page.locator('button', { hasText: '스크랩북 보기' });
+
+    await scrapFolderButton.click();
+    await expect(newFolderButton).toBeVisible();
+    await newFolderButton.click();
+    await folderNameInput.fill(folderName);
+    await saveButton.click();
+    console.log(`스크랩북 폴더 생성 확인`);
+
+    await expect(saveText).toBeVisible();
+    await moveButton.click();
+    await expect(moveText).toBeVisible();
+    console.log(`스크랩북 폴더 이동 확인`);
+
+    await scrapbookButton.click();
+    await expect(this.page).toHaveURL(/collection_books\/\d{8}/);
+    console.log(`스크랩북 폴더 페이지 진입 확인`);
+  }
+
   async scrapbook_allTab_edit() {
     const editButton = this.page.getByRole('button', { name: '편집' });
-    const moveButton = this.page.getByRole('button', { name: '폴더이동' });
-    const deleteButton = this.page.getByRole('button', { name: '삭제' });
     const cancelButton = this.page.getByRole('button', { name: '취소' });
-
-    // 한번에 50개씩만 편집이 가능합니다
 
     await editButton.click();
     await expect(cancelButton).toBeVisible();
     console.log('스크랩북 편집 모드 전환 확인');
+  }
 
-    await this.checkAllVirtualizedCheckboxes();
+  async scrapbook_allTab_select() {
+    const scrapItem = this.page.locator('div[class="css-3q4ecs e1e5aqb12"]');
+    const scrapItemCheckbox = scrapItem.locator('input[type="checkbox"].css-f3z39x');
+ 
+    await scrapItemCheckbox.check();
+    await expect(scrapItemCheckbox).toBeChecked();
+    console.log('스크랩 아이템 선택 확인');
+  }
+
+  async scrapbook_allTab_move() {
+    const moveButton = this.page.getByRole('button', { name: '폴더이동' });
+    const cancelButton = this.page.getByRole('button', { name: '취소' });
+
+    await moveButton.click();
+    await expect(cancelButton).toBeVisible();
+    console.log('스크랩북 편집 모드 전환 확인');
+  }
+
+  async scrapbook_allTab_delete() {
+    const deleteButton = this.page.getByRole('button', { name: '삭제' });
+    const unscrapText = this.page.getByText('스크랩북에서 삭제되었습니다.');
+
+    this.page.on('dialog', async dialog => {
+      await this.page.waitForTimeout(1000);
+      await dialog.accept(); 
+    });
+
+    await deleteButton.click();
+    await expect(unscrapText).toBeVisible();
+    
+    console.log('스크랩 삭제 동작 확인');
+  }
+
+  async scrapbook_checkEmpty() {
+    const emptyText = this.page.getByText('아직 스크랩한 콘텐츠가 없습니다.');
+
+    try {
+      await expect(emptyText).toBeVisible();
+      console.log(`Empty Text 확인`);
+    } catch {
+      console.log(`Empty Text가 노출되지 않습니다.`);
+    }
+  }
+
+  async scrapbook_exhibitionTab() {
+    const exhibitionTab = this.page.locator('button[class="e6glu9t0 css-8addb9"]', { hasText: '기획전' });
+    
+    await exhibitionTab.click();
+    console.log('스크랩북 기획전 탭 진입 확인');
+  }
+
+  async scrapbook_deleteFolder() {
+    const folderSettingButton = this.page.locator('button', { hasText: '설정' });
+    const folderDeleteButton = this.page.locator('button', { hasText: '폴더 삭제하기' });
+    const deleteButton = this.page.locator('button', { hasText: '확인' });
+
+    await folderSettingButton.click();
+    await expect(folderDeleteButton).toBeVisible();
+    await folderDeleteButton.click();
+    await deleteButton.click();
+    console.log(`스크랩북 폴더 삭제 확인`);
+
+    await expect(this.page).toHaveURL(/users\/\d{8}\/collections/);
+    console.log(`스크랩북 페이지 진입 확인`);
   }
 
   /* 내가 방금 체크한 요소의 다음형제를 찾는 방식 */

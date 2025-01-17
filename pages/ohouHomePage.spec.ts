@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { ohouMyPage } from '../pages/ohouMyPage.spec';
 import config from '../config/ohouConfig.json';
 
 class ohouHomePage {
@@ -85,40 +86,17 @@ class ohouHomePage {
   }
 
   async scrapContents() {
+    const myPage = new ohouMyPage(this.page);
     const title = '이런 사진 찾고 있나요?';
     const area = this.page.locator('div[class="e4cq32f2 css-1wezfk"]', { hasText: title });
     const scrapButton = area.getByLabel('scrap 토글 버튼');
     const scrapText = this.page.getByText('스크랩했습니다.');
-    const scrapFolderButton = this.page.locator('button', { hasText: '폴더에 담기' });
 
     await scrapButton.nth(0).click();
     await expect(scrapText).toBeVisible();
     console.log(`사진 스크랩 완료`);
 
-    const folderName = 'New Folder'
-    const newFolderButton = this.page.locator('button', { hasText: '새로운 폴더 추가하기' });
-    const folderNameInput = this.page.locator('input[class="css-1qgt0b9 e1tlor0y0"]');
-    const saveButton = this.page.locator('button', { hasText: '완료' });
-    const saveText = this.page.getByText(`선택한 컨텐츠를 '${folderName}'으로 이동하시겠습니까?`);
-    const moveButton = this.page.locator('button', { hasText: '확인' });
-    const moveText = this.page.getByText(`'${folderName}'폴더로 이동했습니다.`);
-    const scrapbookButton = this.page.locator('button', { hasText: '스크랩북 보기' });
-
-    await scrapFolderButton.click();
-    await expect(newFolderButton).toBeVisible();
-    await newFolderButton.click();
-    await folderNameInput.fill(folderName);
-    await saveButton.click();
-    console.log(`스크랩북 폴더 생성 확인`);
-
-    await expect(saveText).toBeVisible();
-    await moveButton.click();
-    await expect(moveText).toBeVisible();
-    console.log(`스크랩북 폴더 이동 확인`);
-
-    await scrapbookButton.click();
-    await expect(this.page).toHaveURL(/collection_books\/\d{8}/);
-    console.log(`스크랩북 폴더 페이지 진입 확인`);
+    await myPage.scrap_newFolder();
   }
 
   async unscrapContents() {
@@ -140,25 +118,10 @@ class ohouHomePage {
     await expect(this.page).not.toHaveURL(/contents/);
     console.log(`스크랩북 복귀 완료 확인`);
 
-    try {
-      await expect(emptyText).toBeVisible();
-      console.log(`Empty Text 확인`);
-    } catch {
-      console.log(`Empty Text가 노출되지 않습니다.`);
-    }
+    const myPage = new ohouMyPage(this.page);
 
-    const folderSettingButton = this.page.locator('button', { hasText: '설정' });
-    const folderDeleteButton = this.page.locator('button', { hasText: '폴더 삭제하기' });
-    const deleteButton = this.page.locator('button', { hasText: '확인' });
-
-    await folderSettingButton.click();
-    await expect(folderDeleteButton).toBeVisible();
-    await folderDeleteButton.click();
-    await deleteButton.click();
-    console.log(`스크랩북 폴더 삭제 확인`);
-
-    await expect(this.page).toHaveURL(/users\/\d{8}\/collections/);
-    console.log(`스크랩북 페이지 진입 확인`);
+    await myPage.scrapbook_checkEmpty();
+    await myPage.scrapbook_deleteFolder();
   }
 
   async scrapProject() {
@@ -184,38 +147,12 @@ class ohouHomePage {
   }
 
   async unscrapProject() {
-    const editButton = this.page.getByRole('button', { name: '편집' });
-    const moveButton = this.page.getByRole('button', { name: '폴더이동' });
-    const deleteButton = this.page.getByRole('button', { name: '삭제' });
-    const cancelButton = this.page.getByRole('button', { name: '취소' });
-    const unscrapText = this.page.getByText('스크랩북에서 삭제되었습니다.');
-    const emptyText = this.page.getByText('아직 스크랩한 콘텐츠가 없습니다.');
+    const myPage = new ohouMyPage(this.page);
 
-    await editButton.click();
-    await expect(cancelButton).toBeVisible();
-    console.log('스크랩북 편집 모드 전환 확인');
-
-    const scrapItem = this.page.locator('div[class="css-3q4ecs e1e5aqb12"]');
-    const scrapItemCheckbox = scrapItem.locator('input[type="checkbox"].css-f3z39x');
- 
-    await scrapItemCheckbox.check();
-    await expect(scrapItemCheckbox).toBeChecked();
-    console.log('스크랩 아이템 선택 확인');
-
-    this.page.on('dialog', async dialog => {
-      await this.page.waitForTimeout(1000);
-      await dialog.accept(); 
-    });
-
-    await deleteButton.click();
-    await expect(unscrapText).toBeVisible();
-
-    try {
-      await expect(emptyText).toBeVisible();
-      console.log(`Empty Text 확인`);
-    } catch {
-      console.log(`Empty Text가 노출되지 않습니다.`);
-    }
+    await myPage.scrapbook_allTab_edit();
+    await myPage.scrapbook_allTab_select();
+    await myPage.scrapbook_allTab_delete();
+    await myPage.scrapbook_checkEmpty();
   }
 
   async scrapProductions() {
@@ -230,12 +167,12 @@ class ohouHomePage {
   }
 
   async unscrapProductions() {
+    const myPage = new ohouMyPage(this.page);
     const scrapItem = this.page.locator('div[class="css-3q4ecs e1e5aqb12"]');
     const productionScrapButton = this.page.locator('button[class*="production-selling-header__action__button-scrap"]');
     const brandScrapButton = this.page.locator('button[class="css-ikqseu e3xbt9p0"]');
     const scrapText = this.page.getByText('스크랩했습니다.');
     const unscrapText = this.page.getByText('스크랩북에서 삭제했습니다.');
-    const emptyText = this.page.getByText('아직 스크랩한 콘텐츠가 없습니다.');
 
     await this.clickHeader_scrapbook();
     await scrapItem.click();
@@ -251,12 +188,7 @@ class ohouHomePage {
     console.log(`스크랩북 복귀 완료 확인`);
     await this.page.waitForTimeout(1000);
     
-    try {
-      await expect(emptyText).toBeVisible();
-      console.log(`Empty Text 확인`);
-    } catch {
-      console.log(`Empty Text가 노출되지 않습니다.`);
-    }
+    await myPage.scrapbook_checkEmpty();
   }
 
   async scrapExhibition() {
@@ -281,14 +213,14 @@ class ohouHomePage {
   }
 
   async unscrapExhibition() {
-    const exhibitionTab = this.page.locator('button[class="e6glu9t0 css-8addb9"]', { hasText: '기획전' });
+    const myPage = new ohouMyPage(this.page);
     const scrapItem = this.page.locator('div[class="css-3q4ecs e1e5aqb12"]');
     const scrapButton = this.page.locator('button[class*="e1ibyt6j0 e5j3oup1"]');
     const unscrapText = this.page.getByText('스크랩북에서 삭제했습니다.');
-    const emptyText = this.page.getByText('아직 스크랩한 콘텐츠가 없습니다.');
 
     await this.clickHeader_scrapbook();
-    await exhibitionTab.click();
+    await myPage.scrapbook_exhibitionTab();
+
     await scrapItem.click();
     await expect(this.page).toHaveURL(/exhibitions/);
     console.log(`기획전 페이지 진입 확인`);
@@ -301,12 +233,7 @@ class ohouHomePage {
     await expect(this.page).not.toHaveURL(/exhibitions/);
     console.log(`스크랩북 복귀 완료 확인`);
 
-    try {
-      await expect(emptyText).toBeVisible();
-      console.log(`Empty Text 확인`);
-    } catch {
-      console.log(`Empty Text가 노출되지 않습니다.`);
-    }
+    await myPage.scrapbook_checkEmpty();
   }
 }
 
