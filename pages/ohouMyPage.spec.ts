@@ -10,33 +10,28 @@ class ohouMyPage {
 
   /** 기존 폴더로 이동 */
   async scrap_moveFolder() {
+    const folderName = 'My Folder';
     const scrapFolderButton = this.page.locator('button', { hasText: '폴더에 담기' });
-    const newFolderButton = this.page.locator('button', { hasText: '새로운 폴더 추가하기' });
-    const folderNameInput = this.page.locator('input[class="css-1qgt0b9 e1tlor0y0"]');
-    const saveButton = this.page.locator('button', { hasText: '완료' });
+    const myFolder = this.page.locator('button[class="css-1qzbqmz etdzwz22"]', { hasText: folderName });
     const moveButton = this.page.locator('button', { hasText: '확인' });
+    const moveText = this.page.getByText(`'${folderName}'폴더로 이동했습니다.`);
     const scrapbookButton = this.page.locator('button', { hasText: '스크랩북 보기' });
 
     await scrapFolderButton.click();
-    await expect(newFolderButton).toBeVisible();
-    // await newFolderButton.click();
-    // await folderNameInput.fill(folderName);
-    // await saveButton.click();
-    // console.log(`스크랩북 폴더 생성 확인`);
+    await expect(myFolder).toBeVisible();
+    await myFolder.click();
+    await moveButton.click();
+    await expect(moveText).toBeVisible();
+    console.log(`스크랩북 폴더 이동 확인`);
 
-    // await expect(saveText).toBeVisible();
-    // await moveButton.click();
-    // await expect(moveText).toBeVisible();
-    // console.log(`스크랩북 폴더 이동 확인`);
-
-    // await scrapbookButton.click();
-    // await expect(this.page).toHaveURL(/collection_books\/\d{8}/);
-    // console.log(`스크랩북 폴더 페이지 진입 확인`);
+    await scrapbookButton.click();
+    await expect(this.page).toHaveURL(/collection_books\/\d{8}/);
+    console.log(`스크랩북 폴더 페이지 진입 확인`);
   }
 
   /** 새로운 폴더 생성 후 이동 */
   async scrap_newFolder() {
-    const folderName = 'New Folder'
+    const folderName = 'New Folder';
     const scrapFolderButton = this.page.locator('button', { hasText: '폴더에 담기' });
     const newFolderButton = this.page.locator('button', { hasText: '새로운 폴더 추가하기' });
     const folderNameInput = this.page.locator('input[class="css-1qgt0b9 e1tlor0y0"]');

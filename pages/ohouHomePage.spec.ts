@@ -100,6 +100,7 @@ class ohouHomePage {
   }
 
   async unscrapContents() {
+    const myPage = new ohouMyPage(this.page);
     const contentsItem = this.page.locator('div[class="css-3q4ecs e1e5aqb12"]');
     const scrapButton = this.page.locator('button[data-testid="CardCollection-scrap-button"]');
     const unscrapText = this.page.getByText('스크랩북에서 삭제했습니다.');
@@ -117,8 +118,6 @@ class ohouHomePage {
     await this.page.goBack();
     await expect(this.page).not.toHaveURL(/contents/);
     console.log(`스크랩북 복귀 완료 확인`);
-
-    const myPage = new ohouMyPage(this.page);
 
     await myPage.scrapbook_checkEmpty();
     await myPage.scrapbook_deleteFolder();
