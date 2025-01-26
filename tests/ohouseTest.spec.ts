@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
-import { ohouHomePage } from '../pages/ohouHomePage.spec';
-import { ohouMyPage } from '../pages/ohouMyPage.spec';
-import config from '../config/ohouConfig.json';
+import { ohouseHomePage } from '../pages/ohouseHomePage.spec';
+import { ohouseMyPage } from '../pages/ohouseMyPage.spec';
+import config from '../config/ohouseConfig.json';
 
 const userEmail = config.email;
 const userPassword = config.password;
@@ -11,8 +11,8 @@ let myPage;
 
 test.setTimeout(120000);
 test.beforeEach(async ({ page }) => {
-  homePage = new ohouHomePage(page);
-  myPage = new ohouMyPage(page);
+  homePage = new ohouseHomePage(page);
+  myPage = new ohouseMyPage(page);
 });
 
 test.afterEach(async ({ page }) => {
@@ -20,7 +20,7 @@ test.afterEach(async ({ page }) => {
   console.log("오늘의집 테스트 종료");
 });
 
-test.describe('Ohou Test', () => {
+test.describe('Ohouse Test', () => {
 
   test('Login and Logout Test', async () => {
     await homePage.gotoMain();

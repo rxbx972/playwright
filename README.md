@@ -7,4 +7,5 @@
 ```
 npx playwright test tests/weverseTest.spec.ts --project=chromium --headed
 npx playwright test tests/oliveyoungTest.spec.ts --project=chromium --headed
+npx playwright test tests/ohouseTest.spec.ts --project=chromium --headed
 ```

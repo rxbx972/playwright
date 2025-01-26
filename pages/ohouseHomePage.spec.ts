@@ -1,8 +1,8 @@
 import { expect } from '@playwright/test';
-import { ohouMyPage } from '../pages/ohouMyPage.spec';
-import config from '../config/ohouConfig.json';
+import { ohouseMyPage } from './ohouseMyPage.spec';
+import config from '../config/ohouseConfig.json';
 
-class ohouHomePage {
+class ohouseHomePage {
 
   page: any;
 
@@ -86,7 +86,7 @@ class ohouHomePage {
   }
 
   async scrapContents() {
-    const myPage = new ohouMyPage(this.page);
+    const myPage = new ohouseMyPage(this.page);
     const title = '이런 사진 찾고 있나요?';
     const area = this.page.locator('div[class="e4cq32f2 css-1wezfk"]', { hasText: title });
     const scrapButton = area.getByLabel('scrap 토글 버튼');
@@ -100,7 +100,7 @@ class ohouHomePage {
   }
 
   async unscrapContents() {
-    const myPage = new ohouMyPage(this.page);
+    const myPage = new ohouseMyPage(this.page);
     const contentsItem = this.page.locator('div[class="css-3q4ecs e1e5aqb12"]');
     const scrapButton = this.page.locator('button[data-testid="CardCollection-scrap-button"]');
     const unscrapText = this.page.getByText('스크랩북에서 삭제했습니다.');
@@ -146,7 +146,7 @@ class ohouHomePage {
   }
 
   async unscrapProject() {
-    const myPage = new ohouMyPage(this.page);
+    const myPage = new ohouseMyPage(this.page);
 
     await myPage.scrapbook_allTab_edit();
     await myPage.scrapbook_allTab_select();
@@ -166,7 +166,7 @@ class ohouHomePage {
   }
 
   async unscrapProductions() {
-    const myPage = new ohouMyPage(this.page);
+    const myPage = new ohouseMyPage(this.page);
     const scrapItem = this.page.locator('div[class="css-3q4ecs e1e5aqb12"]');
     const productionScrapButton = this.page.locator('button[class*="production-selling-header__action__button-scrap"]');
     const brandScrapButton = this.page.locator('button[class="css-ikqseu e3xbt9p0"]');
@@ -212,7 +212,7 @@ class ohouHomePage {
   }
 
   async unscrapExhibition() {
-    const myPage = new ohouMyPage(this.page);
+    const myPage = new ohouseMyPage(this.page);
     const scrapItem = this.page.locator('div[class="css-3q4ecs e1e5aqb12"]');
     const scrapButton = this.page.locator('button[class*="e1ibyt6j0 e5j3oup1"]');
     const unscrapText = this.page.getByText('스크랩북에서 삭제했습니다.');
@@ -236,4 +236,4 @@ class ohouHomePage {
   }
 }
 
-export { ohouHomePage }
+export { ohouseHomePage }

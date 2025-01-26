@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-class ohouMyPage {
+class ohouseMyPage {
 
   page: any;
 
@@ -389,4 +389,4 @@ class ohouMyPage {
 
 }
 
-export { ohouMyPage }
+export { ohouseMyPage }
