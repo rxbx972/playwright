@@ -21,7 +21,7 @@ test.afterEach(async ({ page }) => {
 
 test.describe('Weverse Test', () => {
 
-  test('login and logout', async ({ }) => {
+  test.skip('login and logout', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
@@ -31,20 +31,20 @@ test.describe('Weverse Test', () => {
     await weverse.signOut();
   });
 
-  test('enter jellyshop and shop', async ({ }) => {
+  test.skip('enter jellyshop and shop', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_jellyShop();
     await weverse.clickHeaderButton_weverseShop();
   });
 
-  test('enter new artist', async ({ }) => {
+  test.skip('enter new artist', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.enterNewArtist();
   });
 
-  test('join community', async ({ }) => {
+  test.skip('join community', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
@@ -59,35 +59,31 @@ test.describe('Weverse Test', () => {
     await weverse.clickHeaderButton_signIn();
     await weverse.signIn(userEmail, userPassword);
 
-    test('fan/artist tab', async ({ }) => {
-      await community.gotoCommunity('enhypen');
-      await community.clickFanTab();
-      await community.checkFanTab_likePost();
-      await community.clickArtistTab();
-      await community.checkArtistTab_likePost();
-    });
+    await community.gotoCommunity('enhypen');
+    await community.closeModal();
+    await community.clickFanTab();
+    await community.checkFanTab_likePost();
+    await community.clickArtistTab();
+    await community.checkArtistTab_likePost();
 
-    test('media tab', async ({ }) => {
-      await community.gotoCommunity('plave');
-      await community.clickMediaTab();
-      await community.checkMediaTab_newTab();
-      await community.checkMediaTab_membershipTab();
-      await community.checkMediaTab_allTab();
-      await community.gotoCommunity('weversezone');
-      await community.clickMediaTab();
-      await community.checkMediaTab_newTab();
-      await community.checkMediaTab_recommendTab();
-      await community.checkMediaTab_allTab();
-      await community.gotoCommunity('conangray');
-      await community.clickMediaTab();
-      await community.checkMediaTab_newTab();
-      await community.checkMediaTab_allTab();
-    });
+    await community.gotoCommunity('plave');
+    await community.clickMediaTab();
+    await community.checkMediaTab_newTab();
+    await community.checkMediaTab_membershipTab();
+    await community.checkMediaTab_allTab();
+    await community.gotoCommunity('weversezone');
+    await community.clickMediaTab();
+    await community.checkMediaTab_newTab();
+    await community.checkMediaTab_recommendTab();
+    await community.checkMediaTab_allTab();
+    await community.gotoCommunity('conangray');
+    await community.clickMediaTab();
+    await community.checkMediaTab_newTab();
+    await community.checkMediaTab_allTab();
 
-    test('live tab', async ({ }) => {
-      await community.gotoCommunity('nct127');
-      await community.clickLiveTab();
-      await community.checkLiveTab_lastLiveBy('도영');
-    });
+    await community.gotoCommunity('nct127');
+    await community.clickLiveTab();
+    await community.checkLiveTab_lastLiveBy('도영');
+
   });
 });

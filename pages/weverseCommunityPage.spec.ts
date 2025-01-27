@@ -8,6 +8,7 @@ class weverseCommunityPage {
   constructor(page) {
     this.page = page;
   }
+
   /**
    * @param communityName
    */
