@@ -21,7 +21,7 @@ test.afterEach(async ({ page }) => {
 
 test.describe('Weverse Test', () => {
 
-  test.skip('login and logout', async ({ }) => {
+  test('login and logout', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
@@ -31,20 +31,20 @@ test.describe('Weverse Test', () => {
     await weverse.signOut();
   });
 
-  test.skip('enter jellyshop and shop', async ({ }) => {
+  test('enter jellyshop and shop', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_jellyShop();
     await weverse.clickHeaderButton_weverseShop();
   });
 
-  test.skip('enter new artist', async ({ }) => {
+  test('enter new artist', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.enterNewArtist();
   });
 
-  test.skip('join community', async ({ }) => {
+  test('join community', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
@@ -53,7 +53,7 @@ test.describe('Weverse Test', () => {
     await community.joinCommunity();
   });
 
-  test.skip('enter community', async ({ }) => {
+  test('enter community', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
@@ -92,5 +92,6 @@ test.describe('Weverse Test', () => {
     await community.closeModal();
     await community.clickFanTab();
     await community.fanTab_clickArtistComment();
+    await community.postModal_writeComment('사랑해');
   });
 });

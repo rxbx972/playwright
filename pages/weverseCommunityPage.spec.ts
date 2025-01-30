@@ -103,15 +103,41 @@ class weverseCommunityPage {
 
     await fanPost_artistComment.click();
     await expect(postModal).toHaveAttribute('aria-label', 'Reading feed post');
-    console.log(`팬탭 - 첫번째 코멘트 클릭 확인`);
+    console.log(`팬탭 - 첫번째 코멘트 클릭하여 포스트 진입 확인`);
+  }
 
+  /* 작성중 */
+  async postModal_writeComment(text) {
     const postModal_commentInput = this.page.locator('textarea[class^="CommentInputView_textarea__"]');
     const postModal_commentSubmit = this.page.locator('button[class^="CommentInputView_send_button__"]');
-    const text = '사랑해~!';
 
     await postModal_commentInput.fill(text);
     await postModal_commentSubmit.click();
-    // ing
+  }
+
+  /* 작성중 */
+  async fanTab_clickPostEditor() {
+    const fanPost_artistComment = this.page.locator('div[class^="FeedArtistCommentFlickerItemView_thumbnail_wrap__"]').nth(0);
+    const postModal = this.page.locator('div[id="modal"]');
+
+    await fanPost_artistComment.click();
+    await expect(postModal).toHaveAttribute('aria-label', 'Reading feed post');
+    console.log(`팬탭 - 첫번째 코멘트 클릭하여 포스트 진입 확인`);
+  }
+
+  /* 작성중 */
+  async editorModal_writeText(text) {
+    const postModal_commentInput = this.page.locator('textarea[class^="CommentInputView_textarea__"]');
+    const postModal_commentSubmit = this.page.locator('button[class^="CommentInputView_send_button__"]');
+
+    await postModal_commentInput.fill(text);
+    await postModal_commentSubmit.click();
+  }
+
+  /* 작성중 */
+  async editorModal_uploadImage() {
+    const postModal_commentInput = this.page.locator('textarea[class^="CommentInputView_textarea__"]');
+    const postModal_commentSubmit = this.page.locator('button[class^="CommentInputView_send_button__"]');
   }
 
   async artistTab_likePost() {
