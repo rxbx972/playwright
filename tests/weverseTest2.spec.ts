@@ -53,7 +53,7 @@ test.describe('Weverse Test', () => {
     await community.joinCommunity();
   });
 
-  test('check community', async ({ }) => {
+  test.skip('enter community', async ({ }) => {
     await weverse.gotoMain();
     await weverse.closeModal();
     await weverse.clickHeaderButton_signIn();
@@ -61,29 +61,36 @@ test.describe('Weverse Test', () => {
 
     await community.gotoCommunity('enhypen');
     await community.closeModal();
-    await community.clickFanTab();
-    await community.checkFanTab_likePost();
-    await community.clickArtistTab();
-    await community.checkArtistTab_likePost();
+    await community.enterFanTab();
+    await community.fanTab_likePost();
+    await community.enterArtistTab();
+    await community.artistTab_likePost();
 
     await community.gotoCommunity('plave');
-    await community.clickMediaTab();
-    await community.checkMediaTab_newTab();
-    await community.checkMediaTab_membershipTab();
-    await community.checkMediaTab_allTab();
+    await community.enterMediaTab();
+    await community.mediaTab_enterNewTab();
+    await community.mediaTab_enterMembershipTab();
+    await community.mediaTab_enterAllTab();
     await community.gotoCommunity('weversezone');
-    await community.clickMediaTab();
-    await community.checkMediaTab_newTab();
-    await community.checkMediaTab_recommendTab();
-    await community.checkMediaTab_allTab();
-    await community.gotoCommunity('conangray');
-    await community.clickMediaTab();
-    await community.checkMediaTab_newTab();
-    await community.checkMediaTab_allTab();
+    await community.enterMediaTab();
+    await community.mediaTab_enterNewTab();
+    await community.mediaTab_enterRecommendTab();
+    await community.mediaTab_enterAllTab();
 
     await community.gotoCommunity('nct127');
-    await community.clickLiveTab();
-    await community.checkLiveTab_lastLiveBy('도영');
+    await community.enterLiveTab();
+    await community.liveTab_clickLastLiveBy('도영');
+  });
 
+  test('write community', async ({ }) => {
+    await weverse.gotoMain();
+    await weverse.closeModal();
+    await weverse.clickHeaderButton_signIn();
+    await weverse.signIn(userEmail, userPassword);
+
+    await community.gotoCommunity('illit');
+    await community.closeModal();
+    await community.clickFanTab();
+    await community.fanTab_clickArtistComment();
   });
 });

@@ -44,7 +44,7 @@ class weverseCommunityPage {
     console.log(`나의 커뮤니티 닉네임: ${myNickname}`);
   }
 
-  async clickFanTab() {
+  async enterFanTab() {
     const fanTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"]').filter({ hasText: 'Fan' });
 
     await fanTab.click();
@@ -53,7 +53,7 @@ class weverseCommunityPage {
     console.log(`커뮤니티 팬탭 진입`);
   }
 
-  async clickArtistTab() {
+  async enterArtistTab() {
     const artistTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"]').filter({ hasText: 'Artist' });
 
     await artistTab.click();
@@ -62,7 +62,7 @@ class weverseCommunityPage {
     console.log(`커뮤니티 아티스트탭 진입`);
   }
 
-  async clickMediaTab() {
+  async enterMediaTab() {
     const mediaTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"]').filter({ hasText: 'Media' });
 
     await mediaTab.click();
@@ -71,7 +71,7 @@ class weverseCommunityPage {
     console.log(`커뮤니티 미디어탭 진입`);
   }
 
-  async clickLiveTab() {
+  async enterLiveTab() {
     const liveTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"]').filter({ hasText: 'LIVE' });
 
     await liveTab.click();
@@ -89,7 +89,7 @@ class weverseCommunityPage {
     console.log(`아티스트피디아 페이지 진입 확인`);
   }
 
-  async checkFanTab_likePost() {
+  async fanTab_likePost() {
     const fanPost_like = this.page.locator('button[class^="EmotionButtonView_button_emotion__"]').nth(0);
 
     await fanPost_like.click();
@@ -97,7 +97,24 @@ class weverseCommunityPage {
     console.log(`팬탭 - 첫번째 포스트 좋아요 클릭 확인`);
   }
 
-  async checkArtistTab_likePost() {
+  async fanTab_clickArtistComment() {
+    const fanPost_artistComment = this.page.locator('div[class^="FeedArtistCommentFlickerItemView_thumbnail_wrap__"]').nth(0);
+    const postModal = this.page.locator('div[id="modal"]');
+
+    await fanPost_artistComment.click();
+    await expect(postModal).toHaveAttribute('aria-label', 'Reading feed post');
+    console.log(`팬탭 - 첫번째 코멘트 클릭 확인`);
+
+    const postModal_commentInput = this.page.locator('textarea[class^="CommentInputView_textarea__"]');
+    const postModal_commentSubmit = this.page.locator('button[class^="CommentInputView_send_button__"]');
+    const text = '사랑해~!';
+
+    await postModal_commentInput.fill(text);
+    await postModal_commentSubmit.click();
+    // ing
+  }
+
+  async artistTab_likePost() {
     const artistPost_post = this.page.locator('[class^="ArtistPostListItemView_post_text_wrap__"]').nth(0);
     const artistPost_nickname = this.page.locator('[class^="ArtistPostListItemView_artist_name__"]').nth(0);
     const artistPost_like = this.page.locator('button[class^="EmotionButtonView_button_emotion__"]').nth(0);
@@ -117,7 +134,7 @@ class weverseCommunityPage {
     console.log(`아티스트탭 - '${await artistPost_nickname.textContent()}'의 포스트 좋아요 취소 확인`);
   }
 
-  async checkMediaTab_newTab() {
+  async mediaTab_enterNewTab() {
     const newTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'Latest Media' });
 
     await newTab.click();
@@ -126,23 +143,25 @@ class weverseCommunityPage {
     console.log(`미디어탭 - 최신 미디어 진입 확인`);
   }
 
-  async checkMediaTab_recommendTab() {
+  async mediaTab_enterRecommendTab() {
     const recommendTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'Recommended Media' });
+    
     await recommendTab.click();
     await expect(this.page).toHaveURL(/recommend/);
     await expect(recommendTab).toHaveAttribute('aria-selected', 'true');
     console.log(`미디어탭 - 추천 미디어 진입 확인`);
   }
 
-  async checkMediaTab_membershipTab() {
+  async mediaTab_enterMembershipTab() {
     const membershipTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'Membership' });
+    
     await membershipTab.click();
     await expect(this.page).toHaveURL(/membership/);
     await expect(membershipTab).toHaveAttribute('aria-selected', 'true');
     console.log(`미디어탭 - 멤버십 진입 확인`);
   }
 
-  async checkMediaTab_allTab() {
+  async mediaTab_enterAllTab() {
     const allTab = this.page.locator('a[class^="MediaNavView_link__"]').filter({ hasText: 'See All Media' });
 
     await allTab.click();
@@ -154,7 +173,7 @@ class weverseCommunityPage {
   /**
    * @param artistName
    */
-  async checkLiveTab_lastLiveBy(artistName) {
+  async liveTab_clickLastLiveBy(artistName) {
     const lastLive = this.page.locator('a[class^="LiveListView_live_item__"]').filter({ hasText: artistName }).nth(0);
     const lastLiveBadge = this.page.locator('em[class*="LiveBadgeView_-replay__"]');
     const lastLiveChat = this.page.locator('button[class^="PreviousLiveChatButtonView_show_chat_button__"]');
