@@ -97,6 +97,13 @@ class weverseCommunityPage {
     console.log(`팬탭 - 첫번째 포스트 좋아요 클릭 확인`);
   }
 
+  /* 작성중 */
+  async postModal_closeModal() {
+    const closeButton = this.page.locator('textarea[class^="CommentInputView_textarea__"]');
+
+    await closeButton.click();
+  }
+
   async fanTab_clickArtistComment() {
     const fanPost_artistComment = this.page.locator('div[class^="FeedArtistCommentFlickerItemView_thumbnail_wrap__"]').nth(0);
     const postModal = this.page.locator('div[id="modal"]');
@@ -113,6 +120,7 @@ class weverseCommunityPage {
 
     await postModal_commentInput.fill(text);
     await postModal_commentSubmit.click();
+    await this.postModal_closeModal();
   }
 
   /* 작성중 */
