@@ -97,13 +97,6 @@ class weverseCommunityPage {
     console.log(`팬탭 - 첫번째 포스트 좋아요 클릭 확인`);
   }
 
-  /* 작성중 */
-  async postModal_closeModal() {
-    const closeButton = this.page.locator('textarea[class^="CommentInputView_textarea__"]');
-
-    await closeButton.click();
-  }
-
   async fanTab_clickArtistComment() {
     const fanPost_artistComment = this.page.locator('div[class^="FeedArtistCommentFlickerItemView_thumbnail_wrap__"]').nth(0);
     const postModal = this.page.locator('div[id="modal"]');
@@ -113,39 +106,69 @@ class weverseCommunityPage {
     console.log(`팬탭 - 첫번째 코멘트 클릭하여 포스트 진입 확인`);
   }
 
-  /* 작성중 */
-  async postModal_writeComment(text) {
-    const postModal_commentInput = this.page.locator('textarea[class^="CommentInputView_textarea__"]');
-    const postModal_commentSubmit = this.page.locator('button[class^="CommentInputView_send_button__"]');
+  async postModal_closeModal() {
+    const closeButton = this.page.locator('button[class^="BaseModalView_close_button__"]');
 
-    await postModal_commentInput.fill(text);
-    await postModal_commentSubmit.click();
-    await this.postModal_closeModal();
+    await closeButton.click();
+    await expect(closeButton).not.toBeVisible();
+    console.log(`포스트 - 닫기 확인`);
   }
 
   /* 작성중 */
-  async fanTab_clickPostEditor() {
-    const fanPost_artistComment = this.page.locator('div[class^="FeedArtistCommentFlickerItemView_thumbnail_wrap__"]').nth(0);
-    const postModal = this.page.locator('div[id="modal"]');
+  async postModal_writeComment(text) {
+    const commentInput = this.page.locator('textarea[class^="CommentInputView_textarea__"]');
+    const submitButton = this.page.locator('button[class^="CommentInputView_send_button__"]');
 
-    await fanPost_artistComment.click();
-    await expect(postModal).toHaveAttribute('aria-label', 'Reading feed post');
-    console.log(`팬탭 - 첫번째 코멘트 클릭하여 포스트 진입 확인`);
+    await commentInput.fill(text);
+    await submitButton.click();
+    console.log(`포스트 - 댓글 작성 확인`);
+  }
+
+  async fanTab_clickPostEditor() {
+    const fanPost_editorInput = this.page.locator('div[class^="EditorInputView_thumbnail_area__"]');
+    const editorModal = this.page.locator('div[id="editorWriteModal"]');
+
+    await fanPost_editorInput.click();
+    await expect(editorModal).toHaveAttribute('aria-label', '포스트 쓰기');
+    console.log(`팬탭 - 포스트 작성 클릭하여 에디터 진입 확인`);
+  }
+
+  async editorModal_closeModal() {
+    const closeButton = this.page.locator('button[class^="BaseModalView_close_button__"]');
+
+    await closeButton.click();
+    await expect(closeButton).not.toBeVisible();
+    console.log(`에디터 - 닫기 확인`);
+  }
+
+  async editorModal_cancelModal() { 
+    const closeButton = this.page.locator('button[class^="BaseModalView_close_button__"]');
+    const cancelButton = this.page.locator('button[class^="ModalButtonView_button__"]').filter({ hasText: '삭제하기' });
+
+    await closeButton.click();
+    await cancelButton.click();
+    await expect(closeButton).not.toBeVisible();
+    console.log(`에디터 - 작성 취소 후 닫기 확인`);
+  }
+
+  async editorModal_saveModal() { 
+    const closeButton = this.page.locator('button[class^="BaseModalView_close_button__"]');
+    const saveButton = this.page.locator('button[class^="ModalButtonView_button__"]').filter({ hasText: '저장' });
+
+    await closeButton.click();
+    await saveButton.click();
+    await expect(closeButton).not.toBeVisible();
+    console.log(`포스트 - 작성 저장 후 닫기 확인`);
   }
 
   /* 작성중 */
   async editorModal_writeText(text) {
-    const postModal_commentInput = this.page.locator('textarea[class^="CommentInputView_textarea__"]');
-    const postModal_commentSubmit = this.page.locator('button[class^="CommentInputView_send_button__"]');
+    const editorArea = this.page.locator('div[id="wevEditor"]');
+    const submitButton = this.page.locator('button[class^="EditorWriteModalFooterView_button_submit__"]');
 
-    await postModal_commentInput.fill(text);
-    await postModal_commentSubmit.click();
-  }
-
-  /* 작성중 */
-  async editorModal_uploadImage() {
-    const postModal_commentInput = this.page.locator('textarea[class^="CommentInputView_textarea__"]');
-    const postModal_commentSubmit = this.page.locator('button[class^="CommentInputView_send_button__"]');
+    await editorArea.fill(text);
+    await submitButton.click();
+    console.log(`포스트 - 텍스트 작성 확인`);
   }
 
   async artistTab_likePost() {

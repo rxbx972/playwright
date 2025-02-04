@@ -93,6 +93,9 @@ test.describe('Weverse Test', () => {
     await community.clickFanTab();
     await community.fanTab_clickArtistComment();
     await community.postModal_writeComment('코멘트 남겨요');
+    await community.postModal_closeModal();
+    await community.fanTab_clickPostEditor();
+    await community.editorModal_closeModal();
     await community.fanTab_clickPostEditor();
     await community.editorModal_writeText('포스트 텍스트 등록');
   });
