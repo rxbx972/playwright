@@ -124,6 +124,24 @@ class weverseCommunityPage {
     console.log(`포스트 - 댓글 작성 확인`);
   }
 
+  async postModal_likePost() {
+    const nickname = this.page.locator('div[class^="PostModalView_post_header__"]').locator('[class^="PostHeaderView_nickname__"]');
+    const likeButton = this.page.locator('div[class^="PostModalView_post_action__"]').locator('button[class^="EmotionButtonView_button_emotion__"]');
+    
+    await likeButton.click();
+    await expect(likeButton).toHaveAttribute('aria-pressed', 'true');
+    console.log(`포스트 - '${await nickname.textContent()}'의 포스트 좋아요 확인`);
+  }
+
+  async postModal_unlikePost() {
+    const nickname = this.page.locator('div[class^="PostModalView_post_header__"]').locator('[class^="PostHeaderView_nickname__"]');
+    const likeButton = this.page.locator('div[class^="PostModalView_post_action__"]').locator('button[class^="EmotionButtonView_button_emotion__"]');
+    
+    await likeButton.click();
+    await expect(likeButton).toHaveAttribute('aria-pressed', 'false');
+    console.log(`포스트 - '${await nickname.textContent()}'의 포스트 좋아요 취소 확인`);
+  }
+
   async fanTab_clickPostEditor() {
     const fanPost_editorInput = this.page.locator('div[class^="EditorInputView_thumbnail_area__"]');
     const editorModal = this.page.locator('div[id="editorWriteModal"]');
@@ -172,7 +190,7 @@ class weverseCommunityPage {
   }
 
   async artistTab_likePost() {
-    const artistPost_post = this.page.locator('[class^="ArtistPostListItemView_post_text_wrap__"]').nth(0);
+    const artistPost_text = this.page.locator('[class^="ArtistPostListItemView_post_text_wrap__"]').nth(0);
     const artistPost_nickname = this.page.locator('[class^="ArtistPostListItemView_artist_name__"]').nth(0);
     const artistPost_like = this.page.locator('button[class^="EmotionButtonView_button_emotion__"]').nth(0);
     const artistPostModal_like = this.page.locator('[class^="PostModalView_post_action__"]').locator('button[class^="EmotionButtonView_button_emotion__"]');
@@ -182,7 +200,7 @@ class weverseCommunityPage {
     await expect(artistPost_like).toHaveAttribute('aria-pressed', 'true');
     console.log(`아티스트탭 - '${await artistPost_nickname.textContent()}'의 포스트 좋아요 클릭 확인`);
 
-    await artistPost_post.click();
+    await artistPost_text.click();
     await expect(artistPostModal_like).toHaveAttribute('aria-pressed', 'true');
     await artistPostModal_like.click();
     await expect(artistPostModal_like).toHaveAttribute('aria-pressed', 'false');
@@ -240,6 +258,13 @@ class weverseCommunityPage {
     await expect(lastLiveChat).toBeVisible();
     console.log(`라이브탭 - '${artistName}'의 지난 라이브 진입 확인`);
   }
+
+  async live_likeLive() {
+    // EmotionButtonView_button_emotion__eGktL EmotionButtonView_-detail__vlJob EmotionButtonView_-media__qSIo8
+
+    console.log(`라이브탭 - 의 지난 라이브 진입 확인`);
+  }
+
 }
 
 export { weverseCommunityPage }
