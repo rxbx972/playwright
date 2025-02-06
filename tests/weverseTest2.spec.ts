@@ -80,6 +80,8 @@ test.describe('Weverse Test', () => {
     await community.gotoCommunity('nct127');
     await community.enterLiveTab();
     await community.liveTab_clickLastLiveBy('도영');
+    await community.live_likeLive();
+    await community.live_unlikeLive();
   });
 
   test('write community', async ({ }) => {

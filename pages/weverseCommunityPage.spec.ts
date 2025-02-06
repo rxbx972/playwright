@@ -260,11 +260,22 @@ class weverseCommunityPage {
   }
 
   async live_likeLive() {
-    // EmotionButtonView_button_emotion__eGktL EmotionButtonView_-detail__vlJob EmotionButtonView_-media__qSIo8
-
-    console.log(`라이브탭 - 의 지난 라이브 진입 확인`);
+    const title = this.page.locator('div[class^="HeaderView_container__"]').locator('[class^="TitleView_title__"]');
+    const likeButton = this.page.locator('div[class^="HeaderView_option_wrap__"]').locator('button[class^="EmotionButtonView_button_emotion__"]');
+    
+    await likeButton.click();
+    await expect(likeButton).toHaveAttribute('aria-pressed', 'true');
+    console.log(`라이브 - '${await title.textContent()}' 라이브 좋아요 확인`);
   }
 
+  async live_unlikeLive() {
+    const title = this.page.locator('div[class^="HeaderView_container__"]').locator('[class^="TitleView_title__"]');
+    const likeButton = this.page.locator('div[class^="HeaderView_option_wrap__"]').locator('button[class^="EmotionButtonView_button_emotion__"]');
+    
+    await likeButton.click();
+    await expect(likeButton).toHaveAttribute('aria-pressed', 'false');
+    console.log(`라이브 - '${await title.textContent()}' 라이브 좋아요 취소 확인`);
+  }
 }
 
 export { weverseCommunityPage }
