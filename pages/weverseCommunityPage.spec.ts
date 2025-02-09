@@ -245,6 +245,24 @@ class weverseCommunityPage {
     console.log(`미디어탭 - 전체 미디어 진입 확인`);
   }
 
+  async media_likeMedia() {
+    const title = this.page.locator('div[class^="HeaderView_container__"]').locator('[class^="TitleView_title__"]');
+    const likeButton = this.page.locator('div[class^="HeaderView_option_wrap__"]').locator('button[class^="EmotionButtonView_button_emotion__"]');
+    
+    await likeButton.click();
+    await expect(likeButton).toHaveAttribute('aria-pressed', 'true');
+    console.log(`미디어 - '${await title.textContent()}' 미디어 좋아요 확인`);
+  }
+
+  async media_unlikeMedia() {
+    const title = this.page.locator('div[class^="HeaderView_container__"]').locator('[class^="TitleView_title__"]');
+    const likeButton = this.page.locator('div[class^="HeaderView_option_wrap__"]').locator('button[class^="EmotionButtonView_button_emotion__"]');
+    
+    await likeButton.click();
+    await expect(likeButton).toHaveAttribute('aria-pressed', 'false');
+    console.log(`미디어 - '${await title.textContent()}' 미디어 좋아요 취소 확인`);
+  }
+
   /**
    * @param artistName
    */
