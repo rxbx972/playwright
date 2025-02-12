@@ -16,44 +16,64 @@ class banksaladAuthPage {
   }
 
   async checkInit() {
-    const nextButton = this.page.locator('button').filter({ hasText: '다음' });
-    
-    await expect(nextButton).toHaveAttribute('aria-disabled', 'false');
-    console.log(`본인인증 페이지 [다음] 버튼 비활성화 확인`);
+    const nextButton = this.page.getByRole('button', { name: '다음' });
+
+    await expect(nextButton).toHaveAttribute('disabled', '');
+    console.log(`본인인증 페이지 - [다음] 버튼 비활성화 확인`);
   }
 
   async enterInfo(name, rrn, phoneNumber) {
+    const birthdate = rrn.slice(0, 6);
+    const gender = rrn.slice(6, 7);
+
     const nameInput = this.page.locator('input[id="name"]');
-    const rrnInput = this.page.locator('input[id="rrn"]');
+    const birthdateInput = this.page.locator('input[id="rrn"]').nth(0);
+    const genderInput = this.page.locator('input[id="rrn"]').nth(1);
     const phoneNumberInput = this.page.locator('input[id="phoneNumber"]');
-    const nextButton = this.page.locator('button').filter({ hasText: '다음' });
 
     await nameInput.fill(name);
-    await rrnInput.fill(rrn);
+    await birthdateInput.fill(birthdate);
+    await genderInput.fill(gender);
     await phoneNumberInput.fill(phoneNumber);
-
-    await expect(nextButton).toHaveAttribute('aria-disabled', 'true');
-    await this.page.locator('button[type="submit"]').click();
-
+    console.log(`본인인증 페이지 - 정보 입력 완료`);
   }
 
-  async enterWrongInfo(name, rrn, phoneNumber) {
-    const nameInput = this.page.locator('input[id="name"]');
-    const rrnInput = this.page.locator('input[id="rrn"]');
-    const phoneNumberInput = this.page.locator('input[id="phoneNumber"]');
-    const nextButton = this.page.locator('button').filter({ hasText: '다음' });
-    const errorMessage = this.page.locator('div').filter({ hasText: '오류가 발생했습니다. 다시 시도해주세요.' });;
+  async checkInvalidGender(name, rrn, phoneNumber) {
+    const nextButton = this.page.getByRole('button', { name: '다음' });
 
-    await nameInput.fill(name);
-    await rrnInput.fill(rrn);
-    await phoneNumberInput.fill(phoneNumber);
+    await this.enterInfo(name, rrn, phoneNumber);
 
-    await expect(nextButton).toHaveAttribute('aria-disabled', 'true');
-    await this.page.locator('button[type="submit"]').click();
+    await expect(nextButton).toHaveAttribute('disabled', '');
+    console.log(`본인인증 페이지 - 잘못된 성별 입력으로 [다음] 버튼 비활성화 확인`);
+  }
 
+  async checkInvalidDate(name, rrn, phoneNumber) {
+    const nextButton = this.page.getByRole('button', { name: '다음' });
+    const errorMessage = this.page.getByText('오류가 발생했습니다. 다시 시도해주세요.');
+
+    await this.enterInfo(name, rrn, phoneNumber);
+
+    await expect(nextButton).not.toHaveAttribute('disabled');
+    console.log(`본인인증 페이지 - [다음] 버튼 활성화 확인`);
+
+    await nextButton.click();
     await expect(errorMessage).toBeVisible();
+    console.log(`본인인증 페이지 - 잘못된 생년월일 입력으로 오류 발생 확인`);
   }
 
+  async checkValidInfo(name, rrn, phoneNumber) {
+    const nextButton = this.page.getByRole('button', { name: '다음' });
+    const termsDialog = this.page.getByRole('dialog').filter({ has: this.page.getByText('필수 약관 전체 동의') })
+
+    await this.enterInfo(name, rrn, phoneNumber);
+
+    await expect(nextButton).not.toHaveAttribute('disabled');
+    console.log(`본인인증 페이지 - [다음] 버튼 활성화 확인`);
+
+    await nextButton.click();
+    await expect(termsDialog).toBeVisible();
+    console.log(`본인인증 페이지 - 필수 약관 동의 모달 노출 확인`);
+  }
 }
 
 export { banksaladAuthPage }
