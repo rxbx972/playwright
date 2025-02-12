@@ -12,14 +12,14 @@ class banksaladAuthPage {
 
   async goToPage() {
     await this.page.goto(authPageUrl);
-    console.log(`뱅크샐러드 본인인증 페이지 진입 : ${authPageUrl}`);
+    console.log(`뱅크샐러드 본인인증 페이지 진입`);
   }
 
   async checkInit() {
     const nextButton = this.page.getByRole('button', { name: '다음' });
 
     await expect(nextButton).toHaveAttribute('disabled', '');
-    console.log(`본인인증 페이지 - [다음] 버튼 비활성화 확인`);
+    console.log(`본인인증 페이지 - 정보 미입력 상태에서 [다음] 버튼 비활성화 확인`);
   }
 
   async enterInfo(name, rrn, phoneNumber) {

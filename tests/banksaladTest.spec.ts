@@ -24,7 +24,7 @@ test.describe('Banksalad Test - Auth for Prequalification', () => {
    * ■ Scenario 3: 주민등록번호 오입력 시 본인인증 실패
    */
 
-  test('테스트', async () => {
+  test.skip('본인인증 테스트', async () => {
     await authPage.goToPage();
     await authPage.checkInit();
     await authPage.checkInvalidGender(name, '9912315', phoneNumber);
@@ -34,22 +34,20 @@ test.describe('Banksalad Test - Auth for Prequalification', () => {
     await authPage.checkValidInfo(name, rrn, phoneNumber);
   });
   
-  test.skip('Scenario 1: 본인인증 정보 미입력 시 [다음] 버튼 비활성화됨', async () => {
+  test('Scenario 1: 본인인증 정보 미입력 시 [다음] 버튼 비활성화됨', async () => {
     await authPage.goToPage();
     await authPage.checkInit();
-    await authPage.checkInvalidGender(name, '9912315', phoneNumber);
   });
 
-  test.skip('Scenario 2: 본인인증 정보 입력 시 [다음] 버튼 활성화됨', async () => {
+  test('Scenario 2: 본인인증 정보 입력 시 [다음] 버튼 활성화됨', async () => {
     await authPage.goToPage();
-    await authPage.checkInit();
-    await authPage.checkInvalidDate(name, '9912321', phoneNumber);
-  });
-
-  test.skip('Scenario 3: 주민등록번호 오입력 시 본인인증 실패', async () => {
-    await authPage.goToPage();
-    await authPage.checkInit();
     await authPage.checkValidInfo(name, rrn, phoneNumber);
+  });
+
+  test('Scenario 3: 주민등록번호 오입력 시 본인인증 실패', async () => {
+    await authPage.goToPage();
+    await authPage.checkInvalidGender(name, '9912315', phoneNumber);
+    await authPage.checkInvalidDate(name, '9912321', phoneNumber);
   });
 
 });
