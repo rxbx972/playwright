@@ -1,11 +1,12 @@
 import { test } from '@playwright/test';
 import { banksaladAuthPage } from '../pages/banksaladAuthPage.spec';
 
-let authPage;
 const authPageUrl = 'https://www.banksalad.com/prequalification/loans/credit/authentication';
 const name = '김지연';
 const rrn = '9912311';
 const phoneNumber = '01012345678';
+
+let authPage;
 
 test.beforeEach(async ({ page }) => {
   authPage = new banksaladAuthPage(page);
