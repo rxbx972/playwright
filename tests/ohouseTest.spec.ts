@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import { ohouseHomePage } from '../pages/ohouseHomePage.spec';
-import { ohouseMyPage } from '../pages/ohouseMyPage.spec';
+import { ohouseHomePage } from '../pages/ohouseHomePage';
+import { ohouseMyPage } from '../pages/ohouseMyPage';
 import config from '../config/ohouseConfig.json';
 
 const userEmail = config.email;

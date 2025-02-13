@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { ohouseMyPage } from './ohouseMyPage.spec';
+import { ohouseMyPage } from './ohouseMyPage';
 import config from '../config/ohouseConfig.json';
 
 class ohouseHomePage {

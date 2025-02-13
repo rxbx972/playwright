@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import { weversePage2 } from '../pages/weversePage2.spec';
-import { weverseCommunityPage } from '../pages/weverseCommunityPage.spec';
+import { weversePage2 } from '../pages/weversePage2';
+import { weverseCommunityPage } from '../pages/weverseCommunityPage';
 import config from '../config/weverseConfig.json';
 
 const userEmail = config.email;

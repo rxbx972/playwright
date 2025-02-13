@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { banksaladAuthPage } from '../pages/banksaladAuthPage.spec';
+import { banksaladAuthPage } from '../pages/banksaladAuthPage';
 
 const authPageUrl = 'https://www.banksalad.com/prequalification/loans/credit/authentication';
 const name = '김지연';
