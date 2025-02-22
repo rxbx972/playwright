@@ -17,7 +17,7 @@ class banksaladAuthPage {
     await expect(nameInput).toHaveAttribute('value', '');
     await expect(rrnInput).toHaveAttribute('value', '');
     await expect(phoneNumberInput).toHaveAttribute('value', '');
-    await expect(nextButton).toHaveAttribute('disabled', '');
+    await expect(nextButton).toHaveAttribute('disabled');
     console.log(`본인인증 페이지 - 모든 정보 미입력 상태에서 [다음] 버튼 비활성화 확인`);
   }
 
@@ -51,7 +51,7 @@ class banksaladAuthPage {
     const nextButton = this.page.getByRole('button', { name: '다음' });
 
     await this.enterInfo(name, rrn, phoneNumber);
-    await expect(nextButton).toHaveAttribute('disabled', '');
+    await expect(nextButton).toHaveAttribute('disabled');
     console.log(`본인인증 페이지 - 잘못된 성별 입력으로 [다음] 버튼 활성화되지 않아서 본인인증 실패 확인`);
   }
 
