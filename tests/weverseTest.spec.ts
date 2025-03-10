@@ -1,69 +1,104 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
+import { weversePage } from '../pages/weversePage';
+import { weverseCommunityPage } from '../pages/weverseCommunityPage';
 import config from '../config/weverseConfig.json';
 
-const mainUrl = config.serviceUrl;
 const userEmail = config.email;
 const userPassword = config.password;
 
+let weverse;
+let community;
+
 test.beforeEach(async ({ page }) => {
-  await page.goto(mainUrl);
-  console.log(`위버스 페이지 진입 : ${mainUrl}`);
+  weverse = new weversePage(page);
+  community = new weverseCommunityPage(page);
 });
 
 test.afterEach(async ({ page }) => {
   await page.close();
-  console.log(`위버스 테스트 종료`);
-})
+  console.log("위버스 테스트 종료");
+});
 
 test.describe('Weverse Test', () => {
 
-  test('로그인 > WID 조회 > 로그아웃 완료', async ({ page }) => {
-    const modalCloseButton = page.locator('button[class^="BaseModalView_bottom_button__"]').nth(0);
-    const signInButton = page.locator('button[class^="HeaderView_link_sign__"]');
+  test('login and logout', async ({ }) => {
+    await weverse.gotoMain();
+    await weverse.closeModal();
+    await weverse.clickHeaderButton_signIn();
+    await weverse.signIn(userEmail, userPassword);
+    await weverse.getResponse_wid();
+    await weverse.clickHeaderButton_profile();
+    await weverse.signOut();
+  });
 
-    await modalCloseButton.click();
-    await signInButton.click();
-    await expect(page).toHaveURL(/account.weverse/);
-    console.log(`로그인 페이지 진입`);
+  test('enter jellyshop and shop', async ({ }) => {
+    await weverse.gotoMain();
+    await weverse.closeModal();
+    await weverse.clickHeaderButton_jellyShop();
+    await weverse.clickHeaderButton_weverseShop();
+  });
 
-    const userEmailInput = page.locator('input[name="userEmail"]');
-    const userPasswordInput = page.locator('input[name="password"]');
+  test('enter new artist', async ({ }) => {
+    await weverse.gotoMain();
+    await weverse.closeModal();
+    await weverse.enterNewArtist();
+  });
 
-    await userEmailInput.fill(userEmail);
-    await page.locator('button[type="submit"]').click();
+  test('join community', async ({ }) => {
+    await weverse.gotoMain();
+    await weverse.closeModal();
+    await weverse.clickHeaderButton_signIn();
+    await weverse.signIn(userEmail, userPassword);
+    await community.gotoCommunity('cnblue');
+    await community.joinCommunity();
+  });
 
-    await userPasswordInput.fill(userPassword);
-    await page.locator('button[type="submit"]').click();
+  test('enter community', async ({ }) => {
+    await weverse.gotoMain();
+    await weverse.closeModal();
+    await weverse.clickHeaderButton_signIn();
+    await weverse.signIn(userEmail, userPassword);
 
-    try {
-      await page.waitForFunction(
-        (url: string) => window.location.href === url,
-        mainUrl,
-        { polling: 4000, timeout: 20000 }
-      );
-      console.log(`로그인 후 위버스 페이지 복귀 완료 : ${page.url}`);
-    } catch (error) {
-      console.error(`로그인 후 위버스 페이지 이동 오류 :`, error);
-    }
+    await community.gotoCommunity('enhypen');
+    await community.closeModal();
+    await community.enterFanTab();
+    await community.fanTab_likePost();
+    await community.enterArtistTab();
+    await community.artistTab_likePost();
 
-    const apiUrlPattern = /https:\/\/global\.apis\.naver\.com\/weverse\/wevweb\/users\/v1\.0\/users\/me\?/;
+    await community.gotoCommunity('plave');
+    await community.enterMediaTab();
+    await community.mediaTab_enterNewTab();
+    await community.mediaTab_enterMembershipTab();
+    await community.mediaTab_enterAllTab();
+    await community.gotoCommunity('weversezone');
+    await community.enterMediaTab();
+    await community.mediaTab_enterNewTab();
+    await community.mediaTab_enterRecommendTab();
+    await community.mediaTab_enterAllTab();
 
-    await page.reload();
-    const response = await page.waitForResponse(
-      (response) => apiUrlPattern.test(response.url()) && response.status() === 200
-    );
-    const jsonResponse = await response.json();
-    console.log(`나의 WID 조회 : ${jsonResponse.wid}`);
+    await community.gotoCommunity('nct127');
+    await community.enterLiveTab();
+    await community.liveTab_clickLastLiveBy('도영');
+    await community.live_likeLive();
+    await community.live_unlikeLive();
+  });
 
-    const profileButton = page.locator('button[class^="HeaderView_profile_button__"]');
-    const signOutButton = page.locator('button[class^="MoreHeaderView_sign_out__"]');
+  test('write community', async ({ }) => {
+    await weverse.gotoMain();
+    await weverse.closeModal();
+    await weverse.clickHeaderButton_signIn();
+    await weverse.signIn(userEmail, userPassword);
 
-    await profileButton.click();
-    await expect(page).toHaveURL(/weverse.io\/more/);
-    console.log(`프로필 페이지 진입`);
-
-    await signOutButton.click();
-    await expect(page).not.toHaveURL(/weverse.io\/more/);
-    console.log(`로그아웃 후 위버스 페이지 복귀 완료 : ${page.url}`);
+    await community.gotoCommunity('illit');
+    await community.closeModal();
+    await community.clickFanTab();
+    await community.fanTab_clickArtistComment();
+    await community.postModal_writeComment('코멘트 남겨요');
+    await community.postModal_closeModal();
+    await community.fanTab_clickPostEditor();
+    await community.editorModal_closeModal();
+    await community.fanTab_clickPostEditor();
+    await community.editorModal_writeText('포스트 텍스트 등록');
   });
 });

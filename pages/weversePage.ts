@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import config from '../config/weverseConfig.json';
 
-class weversePage2 {
+class weversePage {
 
   page: any;
 
@@ -133,4 +133,4 @@ class weversePage2 {
   }
 }
 
-export { weversePage2 }
+export { weversePage }
