@@ -118,9 +118,11 @@ class weverseCommunityPage {
   async postModal_writeComment(text) {
     const commentInput = this.page.locator('textarea[class^="CommentInputView_textarea__"]');
     const submitButton = this.page.locator('button[class^="CommentInputView_send_button__"]');
+    const myComment = this.page.locator(''); // text
 
     await commentInput.fill(text);
     await submitButton.click();
+    await expect(myComment).toBeVisible();
     console.log(`포스트 - 댓글 작성 확인`);
   }
 
@@ -183,9 +185,11 @@ class weverseCommunityPage {
   async editorModal_writeText(text) {
     const editorArea = this.page.locator('div[id="wevEditor"]');
     const submitButton = this.page.locator('button[class^="EditorWriteModalFooterView_button_submit__"]');
+    const myText = this.page.locator(''); // text
 
     await editorArea.fill(text);
     await submitButton.click();
+    await expect(myText).toBeVisible();
     console.log(`포스트 - 텍스트 작성 확인`);
   }
 
