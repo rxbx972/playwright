@@ -82,6 +82,8 @@ test.describe('Weverse Test', () => {
     await community.liveTab_clickLastLiveBy('도영');
     await community.live_likeLive();
     await community.live_unlikeLive();
+
+    await community.enterShop();
   });
 
   test('write community', async ({ }) => {

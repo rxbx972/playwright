@@ -109,7 +109,7 @@ class weverseCommunityPage {
     await this.page.mouse.wheel(0, 1000);
     await artistpedia.click();
     await expect(this.page).toHaveURL(/artistpedia/);
-    console.log(`아티스트피디아 페이지 진입 확인`);
+    console.log(`${this.communityName} 아티스트피디아 페이지 진입 확인`);
   }
 
   async fanTab_likePost() {
