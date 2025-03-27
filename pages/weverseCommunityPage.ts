@@ -4,17 +4,20 @@ import config from '../config/weverseConfig.json';
 class weverseCommunityPage {
 
   page: any;
+  communityName: any;
 
   constructor(page) {
     this.page = page;
   }
 
   /**
-   * @param communityName
+   * @param communityDomain
    */
-  async gotoCommunity(communityName) {
-    await this.page.goto(config.serviceUrl + communityName);
-    console.log(`${communityName} 커뮤니티 페이지 진입`);
+  async gotoCommunity(communityDomain) {
+    await this.page.goto(config.serviceUrl + communityDomain);
+
+    this.communityName = await this.page.locator('[class^="HeaderCommunityDropdownWrapperView_name__"]').textContent();
+    console.log(`${this.communityName} 커뮤니티 페이지 진입`);
   }
 
   async closeModal() {
@@ -36,7 +39,7 @@ class weverseCommunityPage {
 
     await nicknameConfirmButton.click();
     await expect(joinCommunityButton).not.toBe;
-    console.log(`커뮤니티 가입 완료`);
+    console.log(`${this.communityName} 커뮤니티 가입 완료`);
 
     const myNickname = await this.page.locator('[class^="CommunityAsideMyProfileView_name_text__"]').textContent();
     
@@ -50,7 +53,7 @@ class weverseCommunityPage {
     await fanTab.click();
     await expect(this.page).toHaveURL(/feed/);
     await expect(fanTab).toHaveAttribute('aria-current', 'true');
-    console.log(`커뮤니티 팬탭 진입`);
+    console.log(`${this.communityName} 커뮤니티 팬탭 진입`);
   }
 
   async enterArtistTab() {
@@ -59,7 +62,7 @@ class weverseCommunityPage {
     await artistTab.click();
     await expect(this.page).toHaveURL(/artist/);
     await expect(artistTab).toHaveAttribute('aria-current', 'true');
-    console.log(`커뮤니티 아티스트탭 진입`);
+    console.log(`${this.communityName} 커뮤니티 아티스트탭 진입`);
   }
 
   async enterMediaTab() {
@@ -68,7 +71,7 @@ class weverseCommunityPage {
     await mediaTab.click();
     await expect(this.page).toHaveURL(/media/);
     await expect(mediaTab).toHaveAttribute('aria-current', 'true');
-    console.log(`커뮤니티 미디어탭 진입`);
+    console.log(`${this.communityName} 커뮤니티 미디어탭 진입`);
   }
 
   async enterLiveTab() {
@@ -77,7 +80,27 @@ class weverseCommunityPage {
     await liveTab.click();
     await expect(this.page).toHaveURL(/live/);
     await expect(liveTab).toHaveAttribute('aria-current', 'true');
-    console.log(`커뮤니티 라이브탭 진입`);
+    console.log(`${this.communityName} 커뮤니티 라이브탭 진입`);
+  }
+
+  async enterShop() {
+    const shopTab = this.page.locator('a[class^="CommunityHeaderNavigationView_link"]').filter({ hasText: 'Shop' });
+
+    const [weverseShopPage] = await Promise.all([
+      this.page.waitForEvent('popup'),
+      shopTab.click()
+    ]);
+
+    await weverseShopPage.waitForLoadState();
+    await expect(weverseShopPage).toHaveURL(/shop.weverse/);
+
+    const shopName = this.page.locator('button[aria-describedby="shop-artist-navigation"]');
+
+    await expect(shopName).toEqual(this.communityName);
+    console.log(`${this.communityName} 위버스샵 페이지 진입`);
+
+    await weverseShopPage.close();
+    console.log(`위버스샵 페이지 닫기`);
   }
 
   async clickArtistpedia() {
